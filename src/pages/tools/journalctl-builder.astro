@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="journalctl Query Builder" description="Build journalctl commands for Linux service and system log troubleshooting.">
+  <section class="hero">
+    <p class="muted">Linux Dork Tools</p>
+    <h1>journalctl Query Builder</h1>
+    <p>Generate practical journalctl commands by service, priority, time range, and follow mode.</p>
+  </section>
+
+  <section class="card">
+    <div class="grid">
+      <label>Service name <input id="service" value="nginx" /></label>
+      <label>Priority
+        <select id="priority">
+          <option value="">Any</option>
+          <option value="3">Errors only</option>
+          <option value="4">Warnings and above</option>
+          <option value="6" selected>Info and above</option>
+        </select>
+      </label>
+      <label>Since <input id="since" value="-2h" /></label>
+      <label>Until <input id="until" value="now" /></label>
+      <label><input id="follow" type="checkbox" /> Follow live logs (-f)</label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Generated command</h2>
+    <pre id="journalctl-output"></pre>
+  </section>
+
+  <script src="../../scripts/journalctl-builder.ts"></script>
+  <style>
+    .grid { display:grid; gap:.65rem; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); }
+    label { display:grid; gap:.35rem; font-weight:600; }
+    input, select { border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:.55rem; padding:.6rem .7rem; font:inherit; }
+    pre { margin:0; background:var(--surface); border:1px solid var(--border); border-radius:.65rem; padding:.75rem; white-space:pre-wrap; }
+  </style>
+</BaseLayout>

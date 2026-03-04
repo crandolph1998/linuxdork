@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is SSH config?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'SSH config is a local file, usually ~/.ssh/config, used to store host aliases and connection settings for repeated SSH access.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Why use SSH host aliases?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Host aliases shorten long connection commands and standardize options like User, Port, and IdentityFile across environments.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I connect using an SSH config host?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'After saving the host block, connect with ssh <alias> instead of repeating the full ssh user@host -p port command.'
+      }
+    }
+  ]
+};
+---
+
+<BaseLayout title="SSH Config Builder" description="Build reusable SSH config host aliases for Linux and DevOps workflows.">
+  <section class="hero">
+    <p class="muted">Linux Dork Tools</p>
+    <h1>SSH Config Builder</h1>
+    <p>Generate maintainable host aliases for faster SSH workflows.</p>
+  </section>
+
+  <section class="card prose">
+    <h2>Build reliable SSH host aliases for daily work</h2>
+    <p>
+      SSH config entries save time by replacing long connection commands with short aliases. Instead of typing full
+      hostnames, usernames, ports, and key files every time, you define them once and connect consistently.
+    </p>
+    <p>
+      Teams often use this pattern for production hosts, staging servers, and internal jump boxes. A clean
+      <code>~/.ssh/config</code> also helps avoid mistakes when multiple environments use different credentials.
+    </p>
+    <p>
+      If you are searching for “ssh config example” or “how to use ssh host alias”, this generator creates a ready block
+      that includes HostName, User, Port, IdentityFile, and optional agent forwarding settings.
+    </p>
+    <p>
+      The result is faster and safer Linux operations because your commands become predictable: update one config block,
+      then use <code>ssh alias</code> everywhere in scripts, terminals, and documentation.
+    </p>
+  </section>
+
+  <section class="card">
+    <div class="grid">
+      <label>Host alias <input id="host" value="prod-web" /></label>
+      <label>HostName <input id="hostname" value="203.0.113.10" /></label>
+      <label>User <input id="user" value="ubuntu" /></label>
+      <label>Port <input id="port" value="22" /></label>
+      <label>IdentityFile <input id="identity" value="~/.ssh/prod_ed25519" /></label>
+      <label>ForwardAgent <select id="agent"><option value="yes">yes</option><option value="no" selected>no</option></select></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Generated SSH config block</h2>
+    <pre id="ssh-output"></pre>
+    <pre>Preview
+ssh prod-web
+scp ./artifact.tar.gz prod-web:/tmp/</pre>
+  </section>
+
+  <script src="../../scripts/ssh-config-builder.ts"></script>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+  <style>
+    .prose p { margin: 0.75rem 0; }
+    .grid { display:grid; gap:.65rem; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); }
+    label { display:grid; gap:.35rem; font-weight:600; }
+    input, select { border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:.55rem; padding:.6rem .7rem; font:inherit; }
+    pre { margin:0; background:var(--surface); border:1px solid var(--border); border-radius:.65rem; padding:.75rem; white-space:pre-wrap; }
+  </style>
+</BaseLayout>

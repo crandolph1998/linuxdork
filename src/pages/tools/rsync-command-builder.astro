@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is rsync used for?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'rsync is used to copy and synchronize files efficiently between local paths or remote systems over SSH.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What does rsync -a do?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The -a flag enables archive mode, preserving permissions, timestamps, symlinks, and recursive directory copying.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Should I test rsync with dry-run first?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Use --dry-run before real sync jobs, especially with --delete, to review exactly what will change.'
+      }
+    }
+  ]
+};
+---
+
+<BaseLayout title="Rsync Command Builder" description="Generate reliable rsync commands for Linux file sync and backup workflows.">
+  <section class="hero">
+    <p class="muted">Linux Dork Tools</p>
+    <h1>Rsync Command Builder</h1>
+    <p>Build sync commands with useful presets like archive, delete, and dry-run.</p>
+  </section>
+
+  <section class="card prose">
+    <h2>Build safer Linux file sync commands</h2>
+    <p>
+      rsync is one of the most practical Linux tools for backups, deployments, and remote file transfers. It minimizes
+      data transfer by copying only changed content, which makes it efficient for repeated synchronization jobs.
+    </p>
+    <p>
+      If you are learning “how to use rsync”, start with clear source and destination paths plus archive mode.
+      Then add targeted flags like compression, excludes, or deletion as your workflow becomes more predictable.
+    </p>
+    <p>
+      Many incidents happen when <code>--delete</code> is used without testing. This is why dry-run support is important:
+      it lets you inspect planned actions before modifying production files.
+    </p>
+    <p>
+      This builder assembles the command for common Linux sync scenarios so you can move quickly while keeping commands
+      explicit and reviewable for scripts, cron jobs, and operational runbooks.
+    </p>
+  </section>
+
+  <section class="card">
+    <div class="grid">
+      <label>Source path <input id="source" value="/srv/www/" /></label>
+      <label>Destination path <input id="destination" value="backup@10.0.0.20:/data/www/" /></label>
+      <label>Exclude pattern <input id="exclude" value="*.log" /></label>
+    </div>
+    <div class="checks">
+      <label><input id="archive" type="checkbox" checked /> Archive (-a)</label>
+      <label><input id="verbose" type="checkbox" checked /> Verbose (-v)</label>
+      <label><input id="compress" type="checkbox" checked /> Compress (-z)</label>
+      <label><input id="delete" type="checkbox" /> Delete removed files (--delete)</label>
+      <label><input id="dryrun" type="checkbox" /> Dry run (--dry-run)</label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Generated command</h2>
+    <pre id="rsync-output"></pre>
+    <pre>Preview
+rsync -a -v -z --dry-run --exclude='*.log' /srv/www/ backup@10.0.0.20:/data/www/</pre>
+  </section>
+
+  <script src="../../scripts/rsync-command-builder.ts"></script>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+  <style>
+    .prose p { margin: 0.75rem 0; }
+    .grid { display:grid; gap:.65rem; grid-template-columns: repeat(auto-fit,minmax(230px,1fr)); }
+    label { display:flex; gap:.45rem; align-items:center; }
+    .grid label { display:grid; font-weight:600; gap:.35rem; }
+    input { border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:.55rem; padding:.6rem .7rem; font:inherit; }
+    .checks { display:grid; gap:.5rem; margin-top:.8rem; }
+    pre { margin:0; background:var(--surface); border:1px solid var(--border); border-radius:.65rem; padding:.75rem; white-space:pre-wrap; }
+  </style>
+</BaseLayout>

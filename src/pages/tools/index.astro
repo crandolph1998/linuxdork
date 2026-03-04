@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Card from '../../components/ui/Card.astro';
+import ButtonLink from '../../components/ui/ButtonLink.astro';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What Linux tools are available on Linux Dork?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Linux Dork includes cron, systemd timer, chmod, SSH config, rsync, journalctl, firewall, disk cleanup, and log grep builders.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I copy commands directly from these tools?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Each tool provides generated command output intended for quick copy/paste into your terminal workflow.'
+      }
+    }
+  ]
+};
+
+const tools = [
+  { href: '/tools/cron-translator', title: 'Cron Job Translator', desc: 'Convert cron to plain English and English schedules back to cron.', preview: '*/15 9-17 * * 1-5 → Every 15 minutes, weekdays during work hours.' },
+  { href: '/tools/systemd-timer', title: 'Systemd Timer Generator', desc: 'Generate .service and .timer unit pairs for Linux automation.', preview: 'OnCalendar=*-*-* 02:30:00' },
+  { href: '/tools/chmod-calculator', title: 'Chmod Calculator', desc: 'Build octal and symbolic permission sets quickly.', preview: '755 / u+rwx,g+rx,o+rx' },
+  { href: '/tools/ssh-config-builder', title: 'SSH Config Builder', desc: 'Generate reusable host alias blocks for ~/.ssh/config.', preview: 'Host prod-web\nHostName 203.0.113.10' },
+  { href: '/tools/rsync-command-builder', title: 'Rsync Command Builder', desc: 'Compose sync commands with archive, delete, and dry-run flags.', preview: 'rsync -a -v -z /src/ user@host:/dest/' },
+  { href: '/tools/journalctl-builder', title: 'journalctl Query Builder', desc: 'Build log-troubleshooting commands by service and priority.', preview: 'journalctl -u nginx -p 3 --since "-2h"' },
+  { href: '/tools/firewall-rule-helper', title: 'Firewall Rule Helper', desc: 'Generate matching UFW and firewalld rules.', preview: 'sudo ufw allow 443/tcp' },
+  { href: '/tools/disk-cleanup-advisor', title: 'Disk Cleanup Advisor', desc: 'Create safe cleanup sequences for package caches and logs.', preview: 'sudo apt autoremove -y\nsudo journalctl --vacuum-time=14d' },
+  { href: '/tools/log-grep-builder', title: 'Log Grep Builder', desc: 'Generate grep filters for logs with regex and context.', preview: 'grep -E -i -n -C 2 "error|timeout" /var/log/syslog' }
+];
+---
+
+<BaseLayout title="Tools" description="Linux command and automation tools hub for cron, systemd, ssh, rsync, logs, firewall, and cleanup workflows.">
+  <section class="space-y-4 rounded-xl border border-zinc-700/80 bg-zinc-900/70 p-8">
+    <p class="text-sm uppercase tracking-wide text-zinc-400">Linux Dork Tools</p>
+    <h1 class="text-3xl font-bold text-green-400">Linux Command & Automation Tools</h1>
+    <p class="max-w-3xl text-zinc-300">
+      Browse each generator below to build copy-ready Linux commands for scheduling, security, logging, sync, and maintenance workflows.
+      Each tool is designed for practical terminal use so you can move from idea to command quickly.
+    </p>
+    <ButtonLink href="/tools/cron-translator">Quick start with Cron Translator</ButtonLink>
+  </section>
+
+  <section class="mt-4 grid gap-3 rounded-xl border border-zinc-700/80 bg-zinc-900/70 p-6 md:grid-cols-2">
+    <div>
+      <h2 class="text-lg font-semibold text-green-400">What this tool hub is for</h2>
+      <p class="mt-2 text-zinc-300">Generate commands faster, reduce syntax mistakes, and keep operational runbooks consistent.</p>
+    </div>
+    <div>
+      <h2 class="text-lg font-semibold text-green-400">Who this helps</h2>
+      <p class="mt-2 text-zinc-300">Useful for Linux admins, DevOps learners, SRE workflows, and homelab automation tasks.</p>
+    </div>
+  </section>
+
+  <section class="mt-4">
+    <h2 class="mb-3 text-xl font-semibold text-green-400">Tool library</h2>
+    <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3 [&>*]:min-w-0">
+      {tools.map((tool) => (
+        <Card>
+          <a href={tool.href} class="no-underline text-green-400 visited:text-green-400 hover:text-green-300">
+            <h3 class="text-base font-semibold text-green-400">{tool.title}</h3>
+          </a>
+          <p class="mt-2 text-sm text-zinc-300">{tool.desc}</p>
+          <pre class="mt-3 max-w-full overflow-x-auto whitespace-pre-wrap break-words rounded-md border border-zinc-700 bg-zinc-950/70 p-3 text-xs text-zinc-200">{tool.preview}</pre>
+        </Card>
+      ))}
+    </div>
+  </section>
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+</BaseLayout>

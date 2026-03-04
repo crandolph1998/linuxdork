@@ -1,0 +1,369 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Linux tutorials, terminal tips, and open-source discoveries for curious tinkerers.'
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} | Linux Dork</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #090c10;
+        --panel: #11161c;
+        --surface: #161d25;
+        --text: #e6edf4;
+        --muted: #9eb0bf;
+        --accent: #39d353;
+        --accent-weak: #21453d;
+        --border: #293540;
+      }
+
+      :root[data-theme='light'] {
+        color-scheme: light;
+        --bg: #f4f7fa;
+        --panel: #ffffff;
+        --surface: #f7fafd;
+        --text: #18222e;
+        --muted: #54697c;
+        --accent: #15803d;
+        --accent-weak: #cdeee7;
+        --border: #d6e2ec;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        line-height: 1.6;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      a,
+      a:visited,
+      a:hover,
+      a:active { color: var(--accent) !important; }
+
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 1rem;
+        background: var(--accent);
+        color: #022019;
+        font-weight: 600;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+      }
+
+      .skip-link:focus { top: 1rem; }
+
+      .container {
+        width: min(84ch, 92vw);
+        margin: 0 auto;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(8px);
+        background: color-mix(in srgb, var(--bg), transparent 18%);
+        border-bottom: 1px solid color-mix(in srgb, var(--border), transparent 25%);
+        z-index: 10;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 0;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        text-decoration: none;
+      }
+
+      .brand-icon {
+        width: 2rem;
+        height: 2rem;
+        flex-shrink: 0;
+        object-fit: contain;
+      }
+
+      .brand span { color: var(--accent); }
+
+      .nav-right {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .links {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .links a,
+      .links a:visited,
+      .drop-trigger,
+      .drop-trigger:visited {
+        text-decoration: none;
+        color: color-mix(in srgb, var(--accent), var(--text) 28%);
+        border: 1px solid transparent;
+        border-radius: 0.55rem;
+        padding: 0.35rem 0.7rem;
+        background: transparent;
+        font: inherit;
+      }
+
+      .links a.active,
+      .drop-trigger.active {
+        color: var(--text);
+        border-color: var(--border);
+        background: var(--surface);
+      }
+
+      .tools-dropdown {
+        position: relative;
+      }
+
+      .drop-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 0.35rem);
+        right: 0;
+        min-width: 16rem;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        padding: 0.45rem;
+        box-shadow: 0 10px 20px color-mix(in srgb, var(--bg), transparent 70%);
+      }
+
+      .tools-dropdown:hover .drop-menu,
+      .tools-dropdown:focus-within .drop-menu {
+        display: grid;
+        gap: 0.2rem;
+      }
+
+      .drop-menu a,
+      .drop-menu a:visited {
+        color: var(--accent);
+        text-decoration: none;
+        border: 1px solid transparent;
+        border-radius: 0.55rem;
+        padding: 0.45rem 0.55rem;
+      }
+
+      .drop-menu a:hover,
+      .drop-menu a.active {
+        border-color: var(--border);
+        background: var(--surface);
+      }
+
+      .theme-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: color-mix(in srgb, var(--accent), var(--text) 28%);
+        border: 1px solid transparent;
+        border-radius: 999px;
+        padding: 0.3rem 0.55rem;
+        background: transparent;
+        cursor: pointer;
+        font: inherit;
+      }
+
+      .theme-toggle:hover {
+        border-color: var(--border);
+        background: var(--surface);
+      }
+
+      .theme-track {
+        width: 2.25rem;
+        height: 1.25rem;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--surface), black 10%);
+        border: 1px solid var(--border);
+        position: relative;
+      }
+
+      .theme-thumb {
+        position: absolute;
+        top: 50%;
+        left: 2px;
+        width: 0.8rem;
+        height: 0.8rem;
+        border-radius: 50%;
+        background: var(--accent);
+        transform: translateY(-50%);
+        transition: left 0.2s ease;
+      }
+
+      :root[data-theme='light'] .theme-thumb {
+        left: calc(100% - 0.8rem - 2px);
+      }
+
+      .theme-label {
+        font-size: 0.86rem;
+        line-height: 1;
+      }
+
+      main { padding: 2rem 0 3rem; }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 1rem;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+      }
+
+      .muted { color: var(--muted); }
+
+      .hero {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      .hero p { max-width: 58ch; }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .button {
+        display: inline-block;
+        text-decoration: none;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        border-radius: 0.65rem;
+        padding: 0.5rem 0.85rem;
+      }
+
+      .button.primary {
+        border-color: color-mix(in srgb, var(--accent), transparent 35%);
+        background: color-mix(in srgb, var(--accent), transparent 82%);
+      }
+
+      footer {
+        border-top: 1px solid color-mix(in srgb, var(--border), transparent 25%);
+        padding: 1.5rem 0 2.5rem;
+        color: color-mix(in srgb, var(--accent), var(--text) 28%);
+        font-size: 0.92rem;
+      }
+
+      .footer-grid {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+    </style>
+    <script is:inline>
+      const savedTheme = localStorage.getItem('linuxdork-theme');
+      if (savedTheme === 'light') {
+        document.documentElement.dataset.theme = 'light';
+      }
+    </script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <header>
+      <nav class="container" aria-label="Primary">
+        <a class="brand" href="/">
+          <img class="brand-icon" src="/linux-dork-logo-transparent.svg" alt="Linux Dork logo" />
+          Linux <span>Dork</span>
+        </a>
+
+        <div class="nav-right">
+          <div class="links">
+            <a href="/" class={currentPath === '/' ? 'active' : undefined}>Home</a>
+            <a href="/blog" class={currentPath.startsWith('/blog') ? 'active' : undefined}>Blog</a>
+            <a href="/self-hosting-apps" class={currentPath.startsWith('/self-hosting-apps') ? 'active' : undefined}>Self-Hosting Apps</a>
+            <div class="tools-dropdown">
+              <a href="/tools" class:list={["drop-trigger", currentPath.startsWith('/tools') && 'active']}>Tools ▾</a>
+              <div class="drop-menu" aria-label="Tools Menu">
+                <a href="/tools" class={currentPath === '/tools' ? 'active' : undefined}>Tools Home</a>
+                <a href="/tools/cron-translator" class={currentPath === '/tools/cron-translator' ? 'active' : undefined}>Cron Translator</a>
+                <a href="/tools/systemd-timer" class={currentPath === '/tools/systemd-timer' ? 'active' : undefined}>Systemd Timer Generator</a>
+                <a href="/tools/chmod-calculator" class={currentPath === '/tools/chmod-calculator' ? 'active' : undefined}>Chmod Calculator</a>
+                <a href="/tools/ssh-config-builder" class={currentPath === '/tools/ssh-config-builder' ? 'active' : undefined}>SSH Config Builder</a>
+                <a href="/tools/rsync-command-builder" class={currentPath === '/tools/rsync-command-builder' ? 'active' : undefined}>Rsync Command Builder</a>
+                <a href="/tools/journalctl-builder" class={currentPath === '/tools/journalctl-builder' ? 'active' : undefined}>journalctl Builder</a>
+                <a href="/tools/firewall-rule-helper" class={currentPath === '/tools/firewall-rule-helper' ? 'active' : undefined}>Firewall Rule Helper</a>
+                <a href="/tools/disk-cleanup-advisor" class={currentPath === '/tools/disk-cleanup-advisor' ? 'active' : undefined}>Disk Cleanup Advisor</a>
+                <a href="/tools/log-grep-builder" class={currentPath === '/tools/log-grep-builder' ? 'active' : undefined}>Log Grep Builder</a>
+              </div>
+            </div>
+          </div>
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+            <span class="theme-track" aria-hidden="true"><span class="theme-thumb"></span></span>
+            <span class="theme-label">Dark</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+    <main class="container" id="main-content">
+      <slot />
+    </main>
+    <footer class="container">
+      <div class="footer-grid">
+        <span>Linux Dork · Cron tools and practical Linux guidance.</span>
+        <span>Built with Astro · Default theme: Dark</span>
+      </div>
+    </footer>
+    <script is:inline>
+      const themeToggle = document.querySelector('#theme-toggle');
+      const themeLabel = document.querySelector('.theme-label');
+      const setToggleText = () => {
+        const isLight = document.documentElement.dataset.theme === 'light';
+        if (themeLabel) themeLabel.textContent = isLight ? 'Light' : 'Dark';
+      };
+
+      themeToggle?.addEventListener('click', () => {
+        const isLight = document.documentElement.dataset.theme === 'light';
+        if (isLight) {
+          delete document.documentElement.dataset.theme;
+          localStorage.setItem('linuxdork-theme', 'dark');
+        } else {
+          document.documentElement.dataset.theme = 'light';
+          localStorage.setItem('linuxdork-theme', 'light');
+        }
+        setToggleText();
+      });
+
+      setToggleText();
+    </script>
+  </body>
+</html>

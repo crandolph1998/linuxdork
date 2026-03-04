@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is a systemd timer?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'A systemd timer is a scheduling unit in Linux that triggers a service using calendar or monotonic timing rules.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'When should I use systemd timer vs cron?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Use systemd timers when you want better service integration, startup catch-up with Persistent=true, and easier logging with journald.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I enable a timer?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Create the .service and .timer files, then run sudo systemctl daemon-reload and sudo systemctl enable --now your-name.timer.'
+      }
+    }
+  ]
+};
+---
+
+<BaseLayout title="Systemd Timer Generator" description="Generate systemd timer and service units for Linux automation schedules.">
+  <section class="hero">
+    <p class="muted">Linux Dork Tools</p>
+    <h1>Systemd Timer Generator</h1>
+    <p>Create a production-friendly systemd timer and service pair in seconds.</p>
+  </section>
+
+  <section class="card prose">
+    <h2>Why use systemd timers for Linux automation?</h2>
+    <p>
+      A systemd timer is a modern scheduling method on Linux that can replace many cron jobs. It links directly to a
+      named service unit, which makes execution behavior explicit and easier to maintain over time.
+    </p>
+    <p>
+      If you are deciding between cron vs systemd timer, timers usually provide stronger lifecycle control.
+      You can inspect failures with systemctl status, review logs in journald, and tune service settings without
+      editing one-line crontab entries.
+    </p>
+    <p>
+      Timers are also useful for machines that reboot often. With <code>Persistent=true</code>, missed runs can be caught
+      after startup, which helps prevent skipped backup or cleanup jobs on laptops, edge hosts, and small servers.
+    </p>
+    <p>
+      This generator creates copy-ready unit content so you can move from schedule idea to a running Linux timer quickly,
+      while still following maintainable systemd conventions.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Service settings</h2>
+    <div class="grid">
+      <label>Service name <input id="svc-name" value="backup-home" /></label>
+      <label>Command <input id="svc-command" value="/usr/local/bin/backup-home.sh" /></label>
+      <label>Run schedule
+        <select id="schedule">
+          <option value="hourly">Hourly</option>
+          <option value="daily" selected>Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="weekdays">Weekdays</option>
+        </select>
+      </label>
+      <label>Time (HH:MM) <input id="time" value="02:30" /></label>
+    </div>
+    <p class="muted">Tip: timers add startup catch-up and better journald logging than classic cron.</p>
+  </section>
+
+  <section class="card">
+    <h2>Generated <code>.service</code></h2>
+    <pre id="service-output"></pre>
+    <h2>Generated <code>.timer</code></h2>
+    <pre id="timer-output"></pre>
+    <p id="enable-output" class="muted"></p>
+    <pre>Preview
+OnCalendar=*-*-* 02:30:00
+sudo systemctl enable --now backup-home.timer</pre>
+  </section>
+
+  <script src="../../scripts/systemd-timer-generator.ts"></script>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+  <style>
+    .prose p { margin: 0.75rem 0; }
+    .grid { display:grid; gap:.65rem; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); }
+    label { display:grid; gap:.35rem; font-weight:600; }
+    input, select { border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:.55rem; padding:.6rem .7rem; font:inherit; }
+    pre { margin:0 0 1rem; background:var(--surface); border:1px solid var(--border); border-radius:.65rem; padding:.75rem; white-space:pre-wrap; overflow:auto; }
+  </style>
+</BaseLayout>

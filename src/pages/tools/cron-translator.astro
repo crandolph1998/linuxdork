@@ -1,0 +1,161 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What are cron jobs?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Cron jobs are scheduled commands that run automatically on Linux at specific times or intervals.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How do cron jobs work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Cron checks each crontab entry once per minute and runs commands when the minute, hour, day, month, and weekday fields match current time.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I convert plain English to cron?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. This tool supports common phrases like every weekday at 09:00 and every 10 minutes and outputs a cron expression you can copy.'
+      }
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title="Cron Translator"
+  description="Linux cron translator for understanding cron jobs, converting plain English schedules, and validating crontab syntax quickly."
+>
+  <section class="hero">
+    <p class="muted">Linux Dork Tools</p>
+    <h1>Cron Job Translator</h1>
+    <p>
+      Use this like a modern crontab.guru workflow: translate cron to plain English, or write plain English and get a cron expression you can copy.
+    </p>
+  </section>
+
+  <section class="card prose">
+    <h2>What are cron jobs and how do cron jobs work?</h2>
+    <p>
+      Cron jobs are automated Linux tasks that run commands on a recurring schedule. They are commonly used for backups,
+      report generation, cache cleanup, and health checks where consistency matters more than manual execution.
+    </p>
+    <p>
+      To understand how cron jobs work, read each entry as five time fields plus one command. Those fields represent minute,
+      hour, day of month, month, and day of week. When the current time matches the schedule, cron launches the command.
+    </p>
+    <p>
+      Most scheduling mistakes come from small syntax errors. Translating cron expressions to plain English helps verify intent,
+      while converting plain English to cron helps reduce formatting errors when writing a new crontab line.
+    </p>
+    <p>
+      If you are comparing cron for Linux automation, this page gives you both directions in one place: explain an expression,
+      then generate a clean expression from natural language examples you can immediately test.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Cron → Plain English</h2>
+    <form id="cron-form">
+      <label for="expression">Cron expression (5 fields)</label>
+      <input
+        id="expression"
+        name="expression"
+        value="*/15 9-17 * * 1-5"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <p class="muted">Format: minute hour day-of-month month day-of-week</p>
+
+      <div class="quick-actions">
+        <button type="button" class="button" data-expression="* * * * *">Every minute</button>
+        <button type="button" class="button" data-expression="0 * * * *">Hourly</button>
+        <button type="button" class="button" data-expression="0 0 * * *">Daily at midnight</button>
+        <button type="button" class="button" data-expression="0 9 * * 1-5">Weekdays at 09:00</button>
+      </div>
+    </form>
+
+    <p class="muted" style="margin-top: 1rem;">Description</p>
+    <pre id="result">Every 15 minutes, between 09:00 and 17:59, Monday through Friday.</pre>
+    <p id="validation" class="muted"></p>
+  </section>
+
+  <section class="card">
+    <h2>Plain English → Cron</h2>
+    <label for="english">Describe your schedule</label>
+    <input
+      id="english"
+      value="every weekday at 09:00"
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <p class="muted">Examples: “every day at 02:30”, “every 10 minutes”, “every monday at 08:00”.</p>
+    <pre id="cron-output">0 9 * * 1-5</pre>
+    <p id="english-validation" class="muted"></p>
+    <pre>Preview
+Input: every day at 02:30
+Output: 30 2 * * *</pre>
+  </section>
+
+  <script src="../../scripts/cron-explainer.ts"></script>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+  <style>
+    .prose p { margin: 0.75rem 0; }
+
+    form,
+    label {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 0.55rem;
+      padding: 0.65rem 0.75rem;
+      font: inherit;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .quick-actions .button {
+      font-size: 0.9rem;
+      padding: 0.35rem 0.7rem;
+      cursor: pointer;
+    }
+
+    pre {
+      margin: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.65rem;
+      padding: 0.75rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  </style>
+</BaseLayout>
