@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../utils/format-date';
+
+const apps = (await getCollection('self-hosting-apps')).sort((a, b) =>
+  b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout title="Self-Hosting Apps" description="Discover self-hosting apps for homelab and Linux server setups.">
+  <h1>Self-Hosting Apps</h1>
+  <p class="muted">Curated app notes for Linux servers, homelabs, and privacy-focused setups.</p>
+
+  {apps.map((app) => (
+    <article class="card">
+      <h2><a href={`/self-hosting-apps/${app.id}/`}>{app.data.title}</a></h2>
+      <p class="muted">Published {formatDate(app.data.pubDate)}</p>
+      <p>{app.data.description}</p>
+      {app.data.website && (
+        <p><a href={app.data.website} target="_blank" rel="noreferrer">Official website ↗</a></p>
+      )}
+      {app.data.tags.length > 0 && <p class="muted">Tags: {app.data.tags.join(' • ')}</p>}
+    </article>
+  ))}
+</BaseLayout>

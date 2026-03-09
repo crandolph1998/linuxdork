@@ -1,0 +1,124 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { formatDate } from '../utils/format-date';
+
+const posts = (await getCollection('blog')).sort((a, b) =>
+  b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const latestPosts = posts.slice(0, 3);
+---
+
+<BaseLayout title="Home">
+  <section class="hero centered-hero">
+    <p class="muted">Linux tips from a friendly penguin</p>
+    <h1>Linux Dork helps you level up your terminal workflow.</h1>
+    <p>
+      Discover practical Linux tutorials, automation ideas, troubleshooting guides, and self-hosting tools
+      built for curious tinkerers and daily power users.
+    </p>
+    <div class="hero-actions centered-actions">
+      <a class="button primary" href="/blog">Read posts</a>
+      <a class="button" href="/tools">Explore tools</a>
+      <a class="button" href="/self-hosting-apps">Self-Hosting Apps</a>
+    </div>
+  </section>
+
+  <section class="post-section">
+    <div class="section-head">
+      <h2>Latest Posts</h2>
+      <a class="view-all-link" href="/blog">View all posts →</a>
+    </div>
+
+    {latestPosts.length === 0 ? (
+      <p class="card muted">No posts yet. Add markdown files in <code>src/content/blog</code>.</p>
+    ) : (
+      <div class="post-grid">
+        {latestPosts.map((post) => (
+          <article class="post-card">
+            <p class="muted post-date">{formatDate(post.data.pubDate)}</p>
+            <h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
+            <p>{post.data.description}</p>
+            <a class="read-more" href={`/blog/${post.id}/`}>Read post →</a>
+          </article>
+        ))}
+      </div>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .centered-hero {
+    text-align: center;
+    max-width: 88ch;
+    margin-inline: auto;
+    padding: 3rem 1.5rem;
+  }
+
+  .centered-hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15;
+    margin: 0.4rem 0 0.7rem;
+  }
+
+  .centered-hero p {
+    margin-inline: auto;
+    max-width: 64ch;
+  }
+
+  .centered-actions {
+    justify-content: center;
+  }
+
+  .centered-actions a {
+    color: var(--accent) !important;
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-head a,
+  .read-more,
+  .view-all-link {
+    text-decoration: none;
+    font-weight: 600;
+    color: var(--accent) !important;
+  }
+
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.85rem;
+  }
+
+  .post-card {
+    border: 1px solid var(--border);
+    border-radius: 0.9rem;
+    padding: 1rem;
+    background: var(--panel);
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .post-card h3 {
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  .post-date {
+    font-size: 0.86rem;
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .section-head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

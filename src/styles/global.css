@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+  --color-linux-green-400: #39d353;
+  --color-linux-green-500: #2fb344;
+}

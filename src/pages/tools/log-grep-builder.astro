@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Log Grep Builder" description="Generate grep commands for Linux log analysis and filtering.">
+  <section class="hero">
+    <p class="muted">Linux Dork Tools</p>
+    <h1>Log Grep Builder</h1>
+    <p>Create grep commands for log files with case, regex, and context options.</p>
+  </section>
+
+  <section class="card">
+    <div class="grid">
+      <label>Search pattern <input id="pattern" value="error|timeout" /></label>
+      <label>Log file path <input id="logfile" value="/var/log/syslog" /></label>
+      <label>Context lines <input id="context" value="2" /></label>
+      <label><input id="ignore-case" type="checkbox" checked /> Ignore case (-i)</label>
+      <label><input id="regex" type="checkbox" checked /> Extended regex (-E)</label>
+      <label><input id="line-number" type="checkbox" checked /> Show line numbers (-n)</label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Generated command</h2>
+    <pre id="grep-output"></pre>
+  </section>
+
+  <script src="../../scripts/log-grep-builder.ts"></script>
+  <style>
+    .grid { display:grid; gap:.65rem; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); }
+    label { display:flex; gap:.45rem; align-items:center; }
+    .grid label:nth-child(-n+3) { display:grid; gap:.35rem; align-items:stretch; font-weight:600; }
+    input { border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:.55rem; padding:.6rem .7rem; font:inherit; }
+    pre { margin:0; background:var(--surface); border:1px solid var(--border); border-radius:.65rem; padding:.75rem; white-space:pre-wrap; }
+  </style>
+</BaseLayout>

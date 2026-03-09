@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Disk Cleanup Advisor" description="Generate safer Linux disk cleanup commands with optional package manager support.">
+  <section class="hero">
+    <p class="muted">Linux Dork Tools</p>
+    <h1>Disk Cleanup Advisor</h1>
+    <p>Build cleanup commands for apt, dnf, logs, and temp files with a review-first approach.</p>
+  </section>
+
+  <section class="card">
+    <div class="grid">
+      <label>Distro family
+        <select id="distro"><option value="apt" selected>Debian/Ubuntu (apt)</option><option value="dnf">Fedora/RHEL (dnf)</option></select>
+      </label>
+      <label><input id="logs" type="checkbox" checked /> Vacuum old journal logs</label>
+      <label><input id="tmp" type="checkbox" checked /> List and clean /tmp files older than 7 days</label>
+      <label><input id="dry" type="checkbox" checked /> Include dry-run style checks first</label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Suggested command sequence</h2>
+    <pre id="cleanup-output"></pre>
+  </section>
+
+  <script src="../../scripts/disk-cleanup-advisor.ts"></script>
+  <style>
+    .grid { display:grid; gap:.65rem; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); }
+    label { display:flex; gap:.45rem; align-items:center; }
+    .grid label:first-child { display:grid; gap:.35rem; align-items:stretch; font-weight:600; }
+    select { border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:.55rem; padding:.6rem .7rem; font:inherit; }
+    pre { margin:0; background:var(--surface); border:1px solid var(--border); border-radius:.65rem; padding:.75rem; white-space:pre-wrap; }
+  </style>
+</BaseLayout>

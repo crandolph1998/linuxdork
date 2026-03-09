@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What does chmod 755 mean?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'chmod 755 means the owner gets read, write, execute while group and others get read and execute.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What is symbolic chmod notation?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Symbolic notation uses user groups and permission letters, such as u+rwx,g+rx,o+rx, to express permission changes.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How do Linux file permissions work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Linux permissions are split into owner, group, and others, each with read, write, and execute bits.'
+      }
+    }
+  ]
+};
+---
+
+<BaseLayout title="Chmod Calculator" description="Calculate Linux file permissions using octal and symbolic chmod formats.">
+  <section class="hero">
+    <p class="muted">Linux Dork Tools</p>
+    <h1>Chmod Calculator</h1>
+    <p>Toggle read/write/execute permissions and copy octal or symbolic mode instantly.</p>
+  </section>
+
+  <section class="card prose">
+    <h2>Understanding Linux file permissions quickly</h2>
+    <p>
+      Linux file permissions determine who can read, modify, or execute files and directories. If you are learning
+      chmod basics, the three permission groups are user, group, and others.
+    </p>
+    <p>
+      Each group has three bits: read (r), write (w), and execute (x). In numeric mode, those bits map to 4, 2, and 1.
+      That is why 7 means rwx, 5 means r-x, and 4 means r--.
+    </p>
+    <p>
+      Many users ask “what does chmod 755 mean?” because it appears in deployment guides. 755 grants full control to the
+      owner and read/execute access to group and others, which is common for executable scripts and public directories.
+    </p>
+    <p>
+      This calculator shows octal and symbolic output together so you can understand both representations and avoid
+      permission mistakes during Linux administration and automation workflows.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Permissions</h2>
+    <div class="perm-grid" id="perm-grid">
+      <div><strong>User</strong><label><input data-perm="u-r" type="checkbox" checked /> Read</label><label><input data-perm="u-w" type="checkbox" checked /> Write</label><label><input data-perm="u-x" type="checkbox" checked /> Execute</label></div>
+      <div><strong>Group</strong><label><input data-perm="g-r" type="checkbox" checked /> Read</label><label><input data-perm="g-w" type="checkbox" /> Write</label><label><input data-perm="g-x" type="checkbox" checked /> Execute</label></div>
+      <div><strong>Other</strong><label><input data-perm="o-r" type="checkbox" checked /> Read</label><label><input data-perm="o-w" type="checkbox" /> Write</label><label><input data-perm="o-x" type="checkbox" checked /> Execute</label></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Generated chmod mode</h2>
+    <pre id="chmod-octal">755</pre>
+    <pre id="chmod-symbolic">u+rwx,g+rx,o+rx</pre>
+    <pre>Preview
+chmod 755 deploy.sh
+chmod u+rwx,g+rx,o+rx deploy.sh</pre>
+  </section>
+
+  <script src="../../scripts/chmod-calculator.ts"></script>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+  <style>
+    .prose p { margin: 0.75rem 0; }
+    .perm-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:.75rem; }
+    .perm-grid div { border:1px solid var(--border); background:var(--surface); border-radius:.7rem; padding:.75rem; display:grid; gap:.35rem; }
+    label { display:flex; gap:.45rem; align-items:center; }
+    pre { margin:0 0 .7rem; background:var(--surface); border:1px solid var(--border); border-radius:.65rem; padding:.75rem; white-space:pre-wrap; }
+  </style>
+</BaseLayout>
