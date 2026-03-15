@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { getLocaleFromPathname, getTranslations, withLocale } from '../../i18n/ui';
+
+const locale = getLocaleFromPathname(Astro.url.pathname);
+const t = getTranslations(locale);
+
+const posts = (await getCollection('selfHostedApps')).sort(
+  (a: CollectionEntry<'selfHostedApps'>, b: CollectionEntry<'selfHostedApps'>) =>
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <BaseHead title={t.selfHostedApps.metaTitle} description={t.selfHostedApps.metaDescription} />
+    <style>
+      main {
+        width: min(1080px, calc(100% - 2rem));
+      }
+      .hero {
+        padding: clamp(1.2rem, 4vw, 2.2rem);
+        margin-bottom: 1rem;
+      }
+      .lead {
+        max-width: 65ch;
+        font-size: clamp(1rem, 2.5vw, 1.15rem);
+      }
+      ul {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      li:first-child {
+        grid-column: span 2;
+      }
+      li a {
+        display: block;
+        padding: 0.9rem;
+        border-radius: 1rem;
+        background: var(--surface-gradient);
+        border: 1px solid var(--hero-recent-border);
+        text-decoration: none;
+        transition: transform 190ms ease, border-color 190ms ease;
+      }
+      li a:hover {
+        transform: translateY(-2px);
+        border-color: var(--hero-recent-hover-border);
+      }
+      li img {
+        width: 100%;
+        margin-bottom: 0.65rem;
+        border-radius: 0.9rem;
+        border: 1px solid var(--hero-recent-border);
+      }
+      .title {
+        margin: 0;
+        color: var(--title-strong);
+      }
+      .date {
+        margin: 0.45rem 0 0;
+        color: var(--date-muted);
+      }
+      @media (max-width: 720px) {
+        ul {
+          grid-template-columns: 1fr;
+        }
+        li:first-child {
+          grid-column: span 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="surface-card hero scan-lines">
+        <div class="terminal-pill">docker compose ps</div>
+        <h1>{t.selfHostedApps.title}</h1>
+        <p class="lead">{t.selfHostedApps.lead}</p>
+      </section>
+      <section>
+        <ul>
+          {
+            posts.map((post) => (
+              <li>
+                <a href={withLocale(locale, `/self-hosted-apps/${post.id}`)}>
+                  {post.data.heroImage && <Image width={720} height={360} src={post.data.heroImage} alt="" />}
+                  <h2 class="title">{post.data.title}</h2>
+                  <p>{post.data.description}</p>
+                  <p class="date"><FormattedDate date={post.data.pubDate} /></p>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>

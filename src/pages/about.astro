@@ -1,0 +1,19 @@
+---
+import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
+import Layout from '../layouts/BlogPost.astro';
+import { getLocaleFromPathname, getTranslations } from '../i18n/ui';
+
+const locale = getLocaleFromPathname(Astro.url.pathname);
+const t = getTranslations(locale);
+---
+
+<Layout
+	title={t.about.title}
+	description={t.about.description}
+	pubDate={new Date('March 15 2026')}
+	heroImage={AboutHeroImage}
+>
+	{
+		t.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)
+	}
+</Layout>

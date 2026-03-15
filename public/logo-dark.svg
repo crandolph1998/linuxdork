@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 88" role="img" aria-label="Penguin with glasses using a laptop" fill="none">
+  <g stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="49" rx="28" ry="29" />
+    <ellipse cx="60" cy="55" rx="13" ry="16" />
+    <circle cx="60" cy="23" r="16" />
+    <circle cx="53.5" cy="22" r="5.5" />
+    <circle cx="66.5" cy="22" r="5.5" />
+    <line x1="59" y1="22" x2="61" y2="22" />
+    <circle cx="53.5" cy="22" r="1" fill="#fff" />
+    <circle cx="66.5" cy="22" r="1" fill="#fff" />
+    <path d="M60 27l-4 4h8l-4-4z" fill="#fff" />
+    <path d="M34 47c-8 4-12 11-12 19" />
+    <path d="M86 47c8 4 12 11 12 19" />
+    <rect x="108" y="38" width="92" height="30" rx="4" />
+    <line x1="120" y1="68" x2="190" y2="68" />
+    <line x1="92" y1="60" x2="116" y2="54" />
+  </g>
+</svg>

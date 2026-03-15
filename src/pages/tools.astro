@@ -1,0 +1,111 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { getLocaleFromPathname, getTranslations, withLocale } from '../i18n/ui';
+
+const locale = getLocaleFromPathname(Astro.url.pathname);
+const t = getTranslations(locale);
+const isExternalHref = (href: string) => /^https?:\/\//.test(href);
+const getToolHref = (href: string) => (isExternalHref(href) ? href : withLocale(locale, href));
+
+const tools = (await getCollection('resources'))
+  .filter((entry: CollectionEntry<'resources'>) => entry.data.category === 'tools')
+  .sort(
+    (a: CollectionEntry<'resources'>, b: CollectionEntry<'resources'>) =>
+      Number(b.data.featured) - Number(a.data.featured) || a.data.title.localeCompare(b.data.title),
+  );
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <BaseHead title={t.tools.metaTitle} description={t.tools.metaDescription} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="surface-card hero scan-lines">
+        <div class="terminal-pill">ls /usr/local/bin</div>
+        <h1>{t.tools.title}</h1>
+        <p class="lead">{t.tools.lead}</p>
+      </section>
+
+      <section class="grid">
+        {
+          tools.map((tool) => (
+            <article class="surface-card card">
+              {(() => {
+                const external = isExternalHref(tool.data.href);
+                const href = getToolHref(tool.data.href);
+                const ctaLabel = external ? t.tools.visitProject : 'Open tool';
+                return (
+                  <>
+              <div class="eyebrow">{tool.data.featured ? t.tools.featured : t.tools.regular}</div>
+              <h2>{tool.data.title}</h2>
+              <p>{tool.data.description}</p>
+              <div class="tags">
+                {tool.data.tags.map((tag: string) => <span>{tag}</span>)}
+              </div>
+              <p class="body">{tool.body}</p>
+              <a href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>{ctaLabel}</a>
+                  </>
+                );
+              })()}
+            </article>
+          ))
+        }
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .hero {
+    padding: clamp(1.2rem, 4vw, 2.2rem);
+  }
+  .lead {
+    max-width: 65ch;
+    font-size: clamp(1rem, 2.5vw, 1.15rem);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .card {
+    padding: 1.2rem;
+  }
+  .eyebrow {
+    margin-bottom: 0.45rem;
+    color: var(--date-muted);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.85rem 0;
+  }
+  .tags span {
+    padding: 0.28rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--hero-recent-border);
+    background: var(--surface-soft);
+    color: var(--foreground);
+    font-size: 0.82rem;
+  }
+  .body {
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

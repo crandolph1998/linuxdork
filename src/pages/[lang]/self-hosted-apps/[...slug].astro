@@ -1,0 +1,19 @@
+---
+import Page from '../../self-hosted-apps/[...slug].astro';
+import { getCollection } from 'astro:content';
+import { defaultLocale, locales } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('selfHostedApps');
+  return locales
+    .filter((locale) => locale !== defaultLocale)
+    .flatMap((lang) =>
+      posts.map((post) => ({
+        params: { lang, slug: post.id },
+        props: post,
+      })),
+    );
+}
+---
+
+<Page {...Astro.props} />

@@ -1,0 +1,10 @@
+---
+import Page from '../../blog/index.astro';
+import { getLocalizedStaticPaths } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return getLocalizedStaticPaths();
+}
+---
+
+<Page />

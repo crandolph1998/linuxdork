@@ -1,0 +1,215 @@
+---
+import { SITE_TITLE } from '../consts';
+import { getLocaleFromPathname, getTranslations, locales, stripLocaleFromPathname, withLocale } from '../i18n/ui';
+import HeaderLink from './HeaderLink.astro';
+
+const locale = getLocaleFromPathname(Astro.url.pathname);
+const t = getTranslations(locale);
+const currentPath = stripLocaleFromPathname(Astro.url.pathname);
+const localeLinks = locales.map((code) => ({
+	code,
+	href: withLocale(code, currentPath),
+	active: code === locale,
+	label: t.localeNames[code],
+}));
+---
+
+<header>
+	<nav class="surface-card scan-lines">
+		<div class="brand">
+			<a href={withLocale(locale, '/')} class="name">{SITE_TITLE}</a>
+			<span class="terminal-pill">cat /var/log/dork.log</span>
+		</div>
+		<div class="internal-links">
+			<HeaderLink href={withLocale(locale, '/')}>{t.header.home}</HeaderLink>
+			<HeaderLink href={withLocale(locale, '/blog')}>{t.header.blog}</HeaderLink>
+			<HeaderLink href={withLocale(locale, '/tools')}>{t.header.tools}</HeaderLink>
+			<HeaderLink href={withLocale(locale, '/self-hosted-apps')}>{t.header.selfHostedApps}</HeaderLink>
+			<HeaderLink href={withLocale(locale, '/about')}>{t.header.about}</HeaderLink>
+			<select class="locale-select" aria-label={t.localeLabel} data-locale-select>
+				{
+					localeLinks.map((entry) => (
+						<option value={entry.href} selected={entry.active}>{entry.label}</option>
+					))
+				}
+			</select>
+			<button
+				type="button"
+				class="theme-toggle"
+				data-theme-toggle
+				data-dark-label={t.header.switchToDark}
+				data-light-label={t.header.switchToLight}
+				aria-label={t.header.switchToLight}
+			>
+				<svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+					<circle cx="12" cy="12" r="4"></circle>
+					<path d="M12 2v2"></path>
+					<path d="M12 20v2"></path>
+					<path d="M4.93 4.93l1.41 1.41"></path>
+					<path d="M17.66 17.66l1.41 1.41"></path>
+					<path d="M2 12h2"></path>
+					<path d="M20 12h2"></path>
+					<path d="M4.93 19.07l1.41-1.41"></path>
+					<path d="M17.66 6.34l1.41-1.41"></path>
+				</svg>
+				<svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+					<path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"></path>
+				</svg>
+			</button>
+		</div>
+	</nav>
+</header>
+<script>
+	const root = document.documentElement;
+	const toggle = document.querySelector('[data-theme-toggle]');
+
+	const getTheme = () => root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+	const setLabel = () => {
+		if (!toggle) return;
+		const theme = getTheme();
+		const darkLabel = toggle.getAttribute('data-dark-label') || 'Switch to dark mode';
+		const lightLabel = toggle.getAttribute('data-light-label') || 'Switch to light mode';
+		toggle.setAttribute('aria-label', theme === 'light' ? darkLabel : lightLabel);
+	};
+
+	setLabel();
+
+	if (toggle) {
+		toggle.addEventListener('click', () => {
+			const next = getTheme() === 'light' ? 'dark' : 'light';
+			root.setAttribute('data-theme', next);
+			localStorage.setItem('theme', next);
+			setLabel();
+		});
+	}
+
+	const localeSelect = document.querySelector('[data-locale-select]') as HTMLSelectElement | null;
+	if (localeSelect) {
+		localeSelect.addEventListener('change', () => {
+			window.location.href = localeSelect.value;
+		});
+	}
+</script>
+<style>
+	header {
+		padding: 1.1rem 1rem 0;
+	}
+	nav {
+		margin: 0 auto;
+		width: min(1080px, calc(100% - 0.1rem));
+		padding: 0.85rem 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.8rem;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scrollbar-width: none;
+	}
+	nav::-webkit-scrollbar {
+		display: none;
+	}
+	.name,
+	.name:hover {
+		text-decoration: none;
+		font-family: 'Space Grotesk', sans-serif;
+		font-size: clamp(1.15rem, 2.6vw, 1.55rem);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		color: var(--foreground);
+	}
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 0.8rem;
+		flex: 0 0 auto;
+		white-space: nowrap;
+	}
+	.internal-links {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		flex: 1 1 auto;
+		flex-wrap: nowrap;
+		justify-content: flex-end;
+		min-width: max-content;
+		white-space: nowrap;
+	}
+	.locale-select {
+		appearance: none;
+		-webkit-appearance: none;
+		padding: 0.32rem 1.8rem 0.32rem 0.7rem;
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		background: var(--surface-soft)
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E")
+			no-repeat right 0.65rem center;
+		color: var(--nav-link);
+		font: inherit;
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		cursor: pointer;
+		transition: border-color 180ms ease, background-color 180ms ease;
+	}
+	.locale-select:hover {
+		border-color: color-mix(in srgb, var(--border) 75%, var(--signal) 25%);
+		background-color: color-mix(in srgb, var(--surface-soft) 75%, var(--signal) 25%);
+	}
+	.locale-select:focus {
+		outline: 2px solid var(--signal);
+		outline-offset: 2px;
+	}
+	.theme-toggle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.45rem 0.8rem;
+		border-radius: 999px;
+		border: 1px solid var(--border);
+		background: var(--surface-soft);
+		color: var(--foreground);
+		font: inherit;
+		font-weight: 700;
+		cursor: pointer;
+		transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+	}
+	.icon {
+		width: 1.1rem;
+		height: 1.1rem;
+		stroke: currentColor;
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		fill: none;
+	}
+	.icon-moon {
+		display: none;
+	}
+	:root[data-theme='light'] .icon-sun {
+		display: none;
+	}
+	:root[data-theme='light'] .icon-moon {
+		display: block;
+	}
+	.theme-toggle:hover {
+		background: color-mix(in srgb, var(--surface-soft) 75%, var(--signal) 25%);
+		border-color: color-mix(in srgb, var(--border) 75%, var(--signal) 25%);
+	}
+	@media (max-width: 860px) {
+		nav {
+			gap: 0.65rem;
+		}
+		.internal-links {
+			gap: 0.3rem;
+		}
+	}
+	@media (max-width: 560px) {
+		.terminal-pill {
+			display: none;
+		}
+		nav {
+			padding: 0.75rem 0.85rem;
+		}
+	}
+</style>

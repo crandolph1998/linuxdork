@@ -1,0 +1,535 @@
+﻿export const locales = ['en', 'de', 'pt', 'es', 'fr', 'nl', 'it', 'zh'] as const;
+export type Locale = (typeof locales)[number];
+
+export const defaultLocale: Locale = 'en';
+
+const translations = {
+  en: {
+    siteDescription: 'A dark-themed Linux blog for shell tricks, distro notes, and nerdy workflows.',
+    localeLabel: 'Language',
+    localeNames: { en: 'EN', de: 'DE', pt: 'PT', es: 'ES', fr: 'FR', nl: 'NL', it: 'IT', zh: '中文' },
+    header: {
+      home: 'Home',
+      blog: 'Blog',
+      tools: 'Tools',
+      selfHostedApps: 'Self-Hosted Apps',
+      about: 'About',
+      switchToDark: 'Switch to dark mode',
+      switchToLight: 'Switch to light mode',
+    },
+    footer: {
+      tagline: 'Root less. Learn more. Break fewer things.',
+      readArchive: 'Read the archive',
+      about: 'About Linux Dork',
+    },
+    home: {
+      lead: 'A dark, nerdy command-line journal about practical Linux workflows, shell quality-of-life hacks, and the occasional kernel rabbit hole.',
+      archiveCta: 'Open The Archive',
+      aboutCta: 'Who Is This Dork?',
+      stats: [
+        {
+          title: 'Shell-First',
+          body: 'Expect terminal snippets you can run today, not abstract theory dumps.',
+        },
+        {
+          title: 'Desktop + Server',
+          body: 'From laptop dotfiles to hardening cloud hosts, this is all Linux territory.',
+        },
+        {
+          title: 'Opinionated',
+          body: 'Clean defaults, reversible tweaks, and a healthy fear of copy-paste one-liners.',
+        },
+      ],
+      recentTitle: 'Recent Linux Notes',
+    },
+    about: {
+      title: 'About Linux Dork',
+      description: 'Why this Linux blog exists and what you can expect from it.',
+      paragraphs: [
+        'Linux Dork is a place for people who enjoy understanding what their machine is doing, not just copying commands from random snippets. You will find practical write-ups, tiny scripts, and repeatable setups that favor clarity over cleverness.',
+        'The tone here is intentionally opinionated: I prefer sane defaults, scriptable tools, and reversible changes. If a tip cannot be undone, tested, or explained in plain language, it does not make the cut.',
+        'Topics include shell productivity, distro comparisons, backup strategy, SSH hygiene, and notes from running Linux both on desktops and remote servers. You can start with the blog index and jump into whatever problem you are solving right now.',
+      ],
+    },
+    tools: {
+      metaTitle: 'Tools | Linux Dork',
+      metaDescription: 'Linux tools worth keeping installed and learning properly.',
+      title: 'Tools',
+      lead: 'Utilities I keep recommending because they solve real Linux problems without adding nonsense.',
+      featured: 'Featured tool',
+      regular: 'Tool',
+      visitProject: 'Visit project',
+    },
+    blog: {
+      metaTitle: 'Blog | Linux Dork',
+      metaDescription: 'Linux notes, experiments, and practical write-ups from Linux Dork.',
+    },
+    selfHostedApps: {
+      metaTitle: 'Self-Hosted Apps | Linux Dork',
+      metaDescription: 'Longer notes on self-hosted apps worth running in a Linux homelab.',
+      title: 'Self-Hosted Apps',
+      lead: 'Longer write-ups on the self-hosted apps that are actually worth maintenance, backups, and disk space.',
+    },
+  },
+  de: {
+    siteDescription: 'Ein Linux-Blog im dunklen Design mit Shell-Tricks, Distro-Notizen und nerdigen Workflows.',
+    localeLabel: 'Sprache',
+    localeNames: { en: 'EN', de: 'DE', pt: 'PT', es: 'ES', fr: 'FR', nl: 'NL', it: 'IT', zh: '中文' },
+    header: {
+      home: 'Start',
+      blog: 'Artikel',
+      tools: 'Werkzeuge',
+      selfHostedApps: 'Self-Hosted-Apps',
+      about: 'Über',
+      switchToDark: 'Zum dunklen Modus wechseln',
+      switchToLight: 'Zum hellen Modus wechseln',
+    },
+    footer: {
+      tagline: 'Weniger Root. Mehr lernen. Weniger kaputtmachen.',
+      readArchive: 'Archiv lesen',
+      about: 'Über Linux Dork',
+    },
+    home: {
+      lead: 'Ein dunkles, nerdiges Kommandozeilen-Journal über praktische Linux-Workflows, Shell-Verbesserungen und gelegentliche Kernel-Abstiege in den Kaninchenbau.',
+      archiveCta: 'Archiv öffnen',
+      aboutCta: 'Wer ist dieser Dork?',
+      stats: [
+        {
+          title: 'Shell zuerst',
+          body: 'Erwarte Terminal-Snippets, die du heute ausführen kannst, statt abstrakter Theorie.',
+        },
+        {
+          title: 'Desktop + Server',
+          body: 'Von Laptop-Dotfiles bis zur Härtung von Cloud-Hosts: alles ist Linux-Territorium.',
+        },
+        {
+          title: 'Meinungsstark',
+          body: 'Saubere Standards, rückgängig machbare Änderungen und gesundes Misstrauen gegenüber Copy-Paste-Einzeilern.',
+        },
+      ],
+      recentTitle: 'Aktuelle Linux-Notizen',
+    },
+    about: {
+      title: 'Über Linux Dork',
+      description: 'Warum es diesen Linux-Blog gibt und was dich hier erwartet.',
+      paragraphs: [
+        'Linux Dork ist für Menschen, die verstehen wollen, was ihre Maschine tut, statt nur zufällige Befehle aus dem Internet zu kopieren. Hier findest du praktische Artikel, kleine Skripte und wiederholbare Setups mit Fokus auf Klarheit statt Cleverness.',
+        'Der Ton ist bewusst meinungsstark: Ich bevorzuge vernünftige Standards, skriptbare Werkzeuge und rückgängig machbare Änderungen. Wenn ein Tipp sich nicht erklären, testen oder zurückrollen lässt, kommt er hier nicht rein.',
+        'Die Themen reichen von Shell-Produktivität über Distro-Vergleiche bis zu Backups, SSH-Hygiene und Notizen aus dem Linux-Alltag auf Desktop und Server.',
+      ],
+    },
+    tools: {
+      metaTitle: 'Werkzeuge | Linux Dork',
+      metaDescription: 'Linux-Werkzeuge, die es wert sind, installiert und richtig gelernt zu werden.',
+      title: 'Werkzeuge',
+      lead: 'Werkzeuge, die ich immer wieder empfehle, weil sie echte Linux-Probleme lösen, ohne neuen Unsinn einzuführen.',
+      featured: 'Empfohlenes Werkzeug',
+      regular: 'Werkzeug',
+      visitProject: 'Projekt öffnen',
+    },
+    blog: {
+      metaTitle: 'Blog | Linux Dork',
+      metaDescription: 'Linux-Notizen, Experimente und praktische Artikel von Linux Dork.',
+    },
+    selfHostedApps: {
+      metaTitle: 'Self-Hosted-Apps | Linux Dork',
+      metaDescription: 'Längere Notizen zu Self-Hosted-Apps, die sich im Homelab wirklich lohnen.',
+      title: 'Self-Hosted-Apps',
+      lead: 'Längere Artikel über Self-Hosted-Apps, die Wartung, Backups und Speicherplatz tatsächlich wert sind.',
+    },
+  },
+  pt: {
+    siteDescription: 'Um blog Linux em tema escuro com truques de shell, notas sobre distros e fluxos nerds.',
+    localeLabel: 'Idioma',
+    localeNames: { en: 'EN', de: 'DE', pt: 'PT', es: 'ES', fr: 'FR', nl: 'NL', it: 'IT', zh: '中文' },
+    header: {
+      home: 'Início',
+      blog: 'Artigos',
+      tools: 'Ferramentas',
+      selfHostedApps: 'Apps Self-Hosted',
+      about: 'Sobre',
+      switchToDark: 'Mudar para o modo escuro',
+      switchToLight: 'Mudar para o modo claro',
+    },
+    footer: {
+      tagline: 'Menos root. Mais aprendizado. Menos estrago.',
+      readArchive: 'Ler o arquivo',
+      about: 'Sobre o Linux Dork',
+    },
+    home: {
+      lead: 'Um diário nerd em tema escuro sobre fluxos práticos no Linux, melhorias de shell e ocasionais mergulhos em buracos de coelho do kernel.',
+      archiveCta: 'Abrir o arquivo',
+      aboutCta: 'Quem é esse dork?',
+      stats: [
+        {
+          title: 'Shell primeiro',
+          body: 'Espere snippets de terminal que você pode executar hoje, não despejos abstratos de teoria.',
+        },
+        {
+          title: 'Desktop + Servidor',
+          body: 'De dotfiles no laptop até endurecimento de hosts na nuvem, tudo aqui é território Linux.',
+        },
+        {
+          title: 'Opinião forte',
+          body: 'Padrões limpos, mudanças reversíveis e uma saudável desconfiança de one-liners copiados.',
+        },
+      ],
+      recentTitle: 'Notas recentes sobre Linux',
+    },
+    about: {
+      title: 'Sobre o Linux Dork',
+      description: 'Por que este blog Linux existe e o que você pode esperar dele.',
+      paragraphs: [
+        'Linux Dork é um espaço para quem gosta de entender o que a máquina está fazendo, não apenas copiar comandos aleatórios. Aqui você encontra textos práticos, scripts pequenos e setups repetíveis que priorizam clareza acima de esperteza.',
+        'O tom aqui é propositalmente opinativo: prefiro padrões sensatos, ferramentas automatizáveis e mudanças reversíveis. Se uma dica não pode ser explicada, testada ou desfeita, ela não entra.',
+        'Os temas incluem produtividade em shell, comparações entre distros, estratégia de backup, higiene com SSH e notas de quem usa Linux tanto no desktop quanto em servidores remotos.',
+      ],
+    },
+    tools: {
+      metaTitle: 'Ferramentas | Linux Dork',
+      metaDescription: 'Ferramentas Linux que valem a pena manter instaladas e aprender direito.',
+      title: 'Ferramentas',
+      lead: 'Utilitários que continuo recomendando porque resolvem problemas reais no Linux sem adicionar complicação inútil.',
+      featured: 'Ferramenta em destaque',
+      regular: 'Ferramenta',
+      visitProject: 'Visitar projeto',
+    },
+    blog: {
+      metaTitle: 'Blog | Linux Dork',
+      metaDescription: 'Notas, experimentos e textos práticos sobre Linux no Linux Dork.',
+    },
+    selfHostedApps: {
+      metaTitle: 'Apps Self-Hosted | Linux Dork',
+      metaDescription: 'Textos mais longos sobre apps self-hosted que realmente valem rodar num homelab Linux.',
+      title: 'Apps Self-Hosted',
+      lead: 'Textos mais longos sobre apps self-hosted que realmente valem manutenção, backup e espaço em disco.',
+    },
+  },
+  es: {
+    siteDescription: 'Un blog de Linux en modo oscuro con trucos de shell, notas sobre distros y flujos bastante nerds.',
+    localeLabel: 'Idioma',
+    localeNames: { en: 'EN', de: 'DE', pt: 'PT', es: 'ES', fr: 'FR', nl: 'NL', it: 'IT', zh: '中文' },
+    header: {
+      home: 'Inicio',
+      blog: 'Artículos',
+      tools: 'Herramientas',
+      selfHostedApps: 'Apps autoalojadas',
+      about: 'Acerca de',
+      switchToDark: 'Cambiar al modo oscuro',
+      switchToLight: 'Cambiar al modo claro',
+    },
+    footer: {
+      tagline: 'Menos root. Más aprendizaje. Menos cosas rotas.',
+      readArchive: 'Leer el archivo',
+      about: 'Acerca de Linux Dork',
+    },
+    home: {
+      lead: 'Un diario nerd en modo oscuro sobre flujos prácticos en Linux, mejoras para la shell y alguna que otra bajada al madriguera del kernel.',
+      archiveCta: 'Abrir el archivo',
+      aboutCta: '¿Quién es este dork?',
+      stats: [
+        {
+          title: 'Shell primero',
+          body: 'Espera fragmentos de terminal que puedas ejecutar hoy, no teoría abstracta sin aplicación.',
+        },
+        {
+          title: 'Escritorio + Servidor',
+          body: 'Desde dotfiles en el portátil hasta endurecer hosts en la nube, todo aquí es territorio Linux.',
+        },
+        {
+          title: 'Con criterio',
+          body: 'Buenos valores por defecto, cambios reversibles y una desconfianza saludable hacia los one-liners copiados.',
+        },
+      ],
+      recentTitle: 'Notas recientes de Linux',
+    },
+    about: {
+      title: 'Acerca de Linux Dork',
+      description: 'Por qué existe este blog de Linux y qué puedes esperar de él.',
+      paragraphs: [
+        'Linux Dork es un lugar para quienes disfrutan entendiendo qué está haciendo su máquina, no solo copiando comandos al azar. Aquí encontrarás textos prácticos, scripts pequeños y configuraciones repetibles que priorizan la claridad por encima de la ocurrencia.',
+        'El tono es deliberadamente opinado: prefiero valores por defecto sensatos, herramientas automatizables y cambios reversibles. Si un consejo no puede explicarse, probarse o deshacerse, no entra.',
+        'Los temas incluyen productividad en la shell, comparaciones entre distros, estrategia de copias de seguridad, higiene con SSH y notas de ejecutar Linux tanto en escritorio como en servidores remotos.',
+      ],
+    },
+    tools: {
+      metaTitle: 'Herramientas | Linux Dork',
+      metaDescription: 'Herramientas de Linux que merece la pena instalar y aprender bien.',
+      title: 'Herramientas',
+      lead: 'Utilidades que sigo recomendando porque resuelven problemas reales de Linux sin añadir tonterías.',
+      featured: 'Herramienta destacada',
+      regular: 'Herramienta',
+      visitProject: 'Visitar proyecto',
+    },
+    blog: {
+      metaTitle: 'Blog | Linux Dork',
+      metaDescription: 'Notas, experimentos y textos prácticos de Linux en Linux Dork.',
+    },
+    selfHostedApps: {
+      metaTitle: 'Apps autoalojadas | Linux Dork',
+      metaDescription: 'Textos más largos sobre apps autoalojadas que realmente merecen un hueco en un homelab Linux.',
+      title: 'Apps autoalojadas',
+      lead: 'Textos más largos sobre apps autoalojadas que de verdad merecen mantenimiento, copias de seguridad y espacio en disco.',
+    },
+  },
+  fr: {
+    siteDescription: 'Un blog Linux en theme sombre avec des astuces shell, des notes distro et des workflows nerd.',
+    localeLabel: 'Langue',
+    localeNames: { en: 'EN', de: 'DE', pt: 'PT', es: 'ES', fr: 'FR', nl: 'NL', it: 'IT', zh: '中文' },
+    header: {
+      home: 'Accueil',
+      blog: 'Articles',
+      tools: 'Outils',
+      selfHostedApps: 'Apps auto-hebergees',
+      about: 'A propos',
+      switchToDark: 'Passer en mode sombre',
+      switchToLight: 'Passer en mode clair',
+    },
+    footer: {
+      tagline: 'Moins de root. Plus dapprentissage. Moins de casse.',
+      readArchive: 'Lire les archives',
+      about: 'A propos de Linux Dork',
+    },
+    home: {
+      lead: 'Un journal Linux pratique sur les workflows shell, les outils systeme et les notes distro.',
+      archiveCta: 'Ouvrir les archives',
+      aboutCta: 'Qui est ce dork ?',
+      stats: [
+        { title: 'Shell dabord', body: 'Des snippets terminal utilisables tout de suite.' },
+        { title: 'Desktop + Serveur', body: 'Du laptop au serveur cloud, tout est Linux.' },
+        { title: 'Avec avis', body: 'Des defaults sains et des changements reversibles.' },
+      ],
+      recentTitle: 'Notes Linux recentes',
+    },
+    about: {
+      title: 'A propos de Linux Dork',
+      description: 'Pourquoi ce blog existe et ce que vous y trouverez.',
+      paragraphs: [
+        'Linux Dork est pour les gens qui veulent comprendre leur machine.',
+        'Le ton est volontairement pratique, scriptable et reversible.',
+        'Vous y trouverez des notes shell, SSH, backup et homelab.',
+      ],
+    },
+    tools: {
+      metaTitle: 'Outils | Linux Dork',
+      metaDescription: 'Des outils Linux utiles au quotidien.',
+      title: 'Outils',
+      lead: 'Des utilitaires vraiment utiles en environnement Linux.',
+      featured: 'Outil en vedette',
+      regular: 'Outil',
+      visitProject: 'Voir le projet',
+    },
+    blog: {
+      metaTitle: 'Blog | Linux Dork',
+      metaDescription: 'Notes Linux, experiences et guides pratiques.',
+    },
+    selfHostedApps: {
+      metaTitle: 'Apps auto-hebergees | Linux Dork',
+      metaDescription: 'Notes detaillees sur les apps auto-hebergees.',
+      title: 'Apps auto-hebergees',
+      lead: 'Des retours pratiques sur les apps qui valent vraiment la maintenance.',
+    },
+  },
+  nl: {
+    siteDescription: 'Een donker Linux-blog met shelltips, distro-notities en praktische workflows.',
+    localeLabel: 'Taal',
+    localeNames: { en: 'EN', de: 'DE', pt: 'PT', es: 'ES', fr: 'FR', nl: 'NL', it: 'IT', zh: '中文' },
+    header: {
+      home: 'Home',
+      blog: 'Artikelen',
+      tools: 'Tools',
+      selfHostedApps: 'Zelfgehoste apps',
+      about: 'Over',
+      switchToDark: 'Schakel naar donkere modus',
+      switchToLight: 'Schakel naar lichte modus',
+    },
+    footer: {
+      tagline: 'Minder root. Meer leren. Minder kapotmaken.',
+      readArchive: 'Lees het archief',
+      about: 'Over Linux Dork',
+    },
+    home: {
+      lead: 'Een command-line dagboek over praktische Linux-workflows en shell-productiviteit.',
+      archiveCta: 'Open archief',
+      aboutCta: 'Wie is deze dork?',
+      stats: [
+        { title: 'Shell eerst', body: 'Direct bruikbare terminal-snippets.' },
+        { title: 'Desktop + Server', body: 'Van laptop-dotfiles tot server-hardening.' },
+        { title: 'Pragmatisch', body: 'Omkeerbare tweaks en verstandige defaults.' },
+      ],
+      recentTitle: 'Recente Linux-notities',
+    },
+    about: {
+      title: 'Over Linux Dork',
+      description: 'Waarom deze Linux-blog bestaat en wat je kunt verwachten.',
+      paragraphs: [
+        'Linux Dork is voor mensen die willen begrijpen wat hun machine doet.',
+        'De toon is praktisch: scriptbaar, testbaar en omkeerbaar.',
+        'Onderwerpen: shell, SSH, backups, distros en homelab-notities.',
+      ],
+    },
+    tools: {
+      metaTitle: 'Tools | Linux Dork',
+      metaDescription: 'Linux-tools die het waard zijn om goed te leren.',
+      title: 'Tools',
+      lead: 'Hulpprogrammas die echte Linux-problemen oplossen.',
+      featured: 'Uitgelichte tool',
+      regular: 'Tool',
+      visitProject: 'Project bekijken',
+    },
+    blog: {
+      metaTitle: 'Blog | Linux Dork',
+      metaDescription: 'Linux-notities, experimenten en praktische artikelen.',
+    },
+    selfHostedApps: {
+      metaTitle: 'Zelfgehoste apps | Linux Dork',
+      metaDescription: 'Langere notities over zelfgehoste apps voor Linux-homelabs.',
+      title: 'Zelfgehoste apps',
+      lead: 'Praktische ervaringen met apps die onderhoud echt waard zijn.',
+    },
+  },
+  it: {
+    siteDescription: 'Un blog Linux a tema scuro con trucchi shell, note sulle distro e workflow nerd.',
+    localeLabel: 'Lingua',
+    localeNames: { en: 'EN', de: 'DE', pt: 'PT', es: 'ES', fr: 'FR', nl: 'NL', it: 'IT', zh: '中文' },
+    header: {
+      home: 'Home',
+      blog: 'Articoli',
+      tools: 'Strumenti',
+      selfHostedApps: 'App self-hosted',
+      about: 'Informazioni',
+      switchToDark: 'Passa alla modalita scura',
+      switchToLight: 'Passa alla modalita chiara',
+    },
+    footer: {
+      tagline: 'Meno root. Piu apprendimento. Meno danni.',
+      readArchive: 'Leggi archivio',
+      about: 'Informazioni su Linux Dork',
+    },
+    home: {
+      lead: 'Un diario da terminale su workflow Linux pratici e produttivita shell.',
+      archiveCta: 'Apri archivio',
+      aboutCta: 'Chi e questo dork?',
+      stats: [
+        { title: 'Shell prima', body: 'Snippet terminali utili subito.' },
+        { title: 'Desktop + Server', body: 'Dal laptop al cloud host, tutto Linux.' },
+        { title: 'Pratico', body: 'Default sensati e modifiche reversibili.' },
+      ],
+      recentTitle: 'Note Linux recenti',
+    },
+    about: {
+      title: 'Informazioni su Linux Dork',
+      description: 'Perche esiste questo blog Linux e cosa aspettarti.',
+      paragraphs: [
+        'Linux Dork e per chi vuole capire davvero la propria macchina.',
+        'Approccio pratico: strumenti scriptabili e consigli reversibili.',
+        'Temi: shell, SSH, backup, distro e homelab.',
+      ],
+    },
+    tools: {
+      metaTitle: 'Strumenti | Linux Dork',
+      metaDescription: 'Strumenti Linux che vale la pena installare e imparare.',
+      title: 'Strumenti',
+      lead: 'Utility affidabili per problemi Linux reali.',
+      featured: 'Strumento in evidenza',
+      regular: 'Strumento',
+      visitProject: 'Visita progetto',
+    },
+    blog: {
+      metaTitle: 'Blog | Linux Dork',
+      metaDescription: 'Note Linux, esperimenti e articoli pratici.',
+    },
+    selfHostedApps: {
+      metaTitle: 'App self-hosted | Linux Dork',
+      metaDescription: 'Approfondimenti sulle app self-hosted per homelab Linux.',
+      title: 'App self-hosted',
+      lead: 'Articoli lunghi su app che meritano davvero manutenzione e backup.',
+    },
+  },
+  zh: {
+    siteDescription: '一个深色主题的 Linux 博客，专注 Shell 技巧、发行版笔记和极客工作流。',
+    localeLabel: '语言',
+    localeNames: { en: 'EN', de: 'DE', pt: 'PT', es: 'ES', fr: 'FR', nl: 'NL', it: 'IT', zh: '中文' },
+    header: {
+      home: '首页',
+      blog: '博客',
+      tools: '工具',
+      selfHostedApps: '自托管应用',
+      about: '关于',
+      switchToDark: '切换到深色模式',
+      switchToLight: '切换到浅色模式',
+    },
+    footer: {
+      tagline: '少用 root，多学习，少出问题。',
+      readArchive: '阅读归档',
+      about: '关于 Linux Dork',
+    },
+    home: {
+      lead: '一个记录实用 Linux 工作流、Shell 提效技巧与内核探索的命令行日志。',
+      archiveCta: '打开归档',
+      aboutCta: '这个 Dork 是谁？',
+      stats: [
+        { title: 'Shell 优先', body: '提供今天就能运行的终端片段。' },
+        { title: '桌面 + 服务器', body: '从桌面 dotfiles 到云主机加固。' },
+        { title: '有主见', body: '理智默认值、可回滚修改、避免盲目复制。' },
+      ],
+      recentTitle: '最新 Linux 笔记',
+    },
+    about: {
+      title: '关于 Linux Dork',
+      description: '这个博客为何存在，以及你能从中获得什么。',
+      paragraphs: [
+        'Linux Dork 面向希望真正理解机器行为的人。',
+        '内容强调可解释、可测试、可回滚。',
+        '主题涵盖 shell、SSH、备份、发行版与 homelab 实战。',
+      ],
+    },
+    tools: {
+      metaTitle: '工具 | Linux Dork',
+      metaDescription: '值得长期安装并深入学习的 Linux 工具。',
+      title: '工具',
+      lead: '我长期推荐的工具，专注解决真实 Linux 问题。',
+      featured: '精选工具',
+      regular: '工具',
+      visitProject: '访问项目',
+    },
+    blog: {
+      metaTitle: '博客 | Linux Dork',
+      metaDescription: 'Linux 笔记、实验与实践文章。',
+    },
+    selfHostedApps: {
+      metaTitle: '自托管应用 | Linux Dork',
+      metaDescription: '值得在 Linux 家庭实验室运行的自托管应用实战。',
+      title: '自托管应用',
+      lead: '关于值得维护、备份并长期运行的自托管应用的深度笔记。',
+    },
+  },
+} as const;
+
+export function getLocaleFromPathname(pathname: string): Locale {
+  const [firstSegment] = pathname.split('/').filter(Boolean);
+  return locales.includes(firstSegment as Locale) ? (firstSegment as Locale) : defaultLocale;
+}
+
+export function stripLocaleFromPathname(pathname: string): string {
+  const segments = pathname.split('/').filter(Boolean);
+  if (segments.length && locales.includes(segments[0] as Locale)) {
+    segments.shift();
+  }
+  const stripped = `/${segments.join('/')}`;
+  return stripped === '/' ? '/' : stripped.replace(/\/+$/, '');
+}
+
+export function withLocale(locale: Locale, path: string): string {
+  const normalized = path === '' ? '/' : path.startsWith('/') ? path : `/${path}`;
+  const clean = normalized === '/' ? '/' : normalized.replace(/\/+$/, '');
+  return locale === defaultLocale ? clean : clean === '/' ? `/${locale}` : `/${locale}${clean}`;
+}
+
+export function getTranslations(locale: Locale) {
+  return translations[locale];
+}
+
+export function getLocalizedStaticPaths() {
+  return locales.filter((locale) => locale !== defaultLocale).map((lang) => ({ params: { lang } }));
+}

@@ -1,0 +1,47 @@
+---
+import { getLocaleFromPathname, getTranslations, withLocale } from '../i18n/ui';
+
+const today = new Date();
+const locale = getLocaleFromPathname(Astro.url.pathname);
+const t = getTranslations(locale);
+---
+
+<footer>
+	<div class="surface-card inner">
+		<p class="line">&copy; {today.getFullYear()} Linux Dork.</p>
+		<p class="line subtle">{t.footer.tagline}</p>
+		<div class="links">
+			<a href={withLocale(locale, '/blog')}>{t.footer.readArchive}</a>
+			<a href={withLocale(locale, '/about')}>{t.footer.about}</a>
+		</div>
+	</div>
+</footer>
+<style>
+	footer {
+		padding: 0 1rem 2rem;
+	}
+	.inner {
+		margin: 0 auto;
+		width: min(1080px, calc(100% - 0.1rem));
+		padding: 1.3rem;
+		text-align: center;
+	}
+	.line {
+		margin: 0;
+		color: var(--footer-line);
+	}
+	.subtle {
+		margin-top: 0.35rem;
+		color: var(--footer-subtle);
+	}
+	.links {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		margin-top: 0.8rem;
+	}
+	.links a {
+		text-decoration: none;
+		color: var(--footer-link);
+	}
+</style>

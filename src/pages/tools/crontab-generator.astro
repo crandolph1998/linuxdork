@@ -1,0 +1,1007 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { getLocaleFromPathname, type Locale, withLocale } from '../../i18n/ui';
+
+const locale = getLocaleFromPathname(Astro.url.pathname);
+
+const copy: Record<Locale, {
+	title: string;
+	metaTitle: string;
+	metaDescription: string;
+	lead: string;
+	expression: string;
+	copy: string;
+	copied: string;
+	humanReadable: string;
+	nextRun: string;
+	legend: string;
+	shortcuts: string;
+	invalid: string;
+	noRun: string;
+	at: string;
+	nickname: string;
+	defaultDescription: string;
+	openExample: string;
+	backToTools: string;
+	minute: string;
+	hour: string;
+	dayOfMonth: string;
+	month: string;
+	dayOfWeek: string;
+}> = {
+	en: {
+		title: 'Crontab Generator',
+		metaTitle: 'Crontab Generator | Linux Dork',
+		metaDescription: 'Build Linux cron expressions, translate them into plain English, and preview the next run time.',
+		lead: 'Build and verify Linux cron schedules without memorizing every field combination.',
+		expression: 'Cron expression',
+		copy: 'Copy',
+		copied: 'Copied',
+		humanReadable: 'Human readable',
+		nextRun: 'Next run',
+		legend: 'Cron reference',
+		shortcuts: 'Common shortcuts',
+		invalid: 'Invalid cron expression. Use five fields or a supported shortcut such as @daily.',
+		noRun: 'No next run found within the search window.',
+		at: 'at',
+		nickname: 'Shortcut',
+		defaultDescription: 'Runs on schedule',
+		openExample: 'Load example',
+		backToTools: 'Back to Tools',
+		minute: 'Minute',
+		hour: 'Hour',
+		dayOfMonth: 'Day of month',
+		month: 'Month',
+		dayOfWeek: 'Day of week',
+	},
+	de: {
+		title: 'Crontab-Generator',
+		metaTitle: 'Crontab-Generator | Linux Dork',
+		metaDescription: 'Linux-Cron-Ausdrücke erstellen, in Klartext übersetzen und den nächsten Lauf prüfen.',
+		lead: 'Linux-Cron-Zeitpläne bauen und prüfen, ohne jede Feldkombination auswendig zu kennen.',
+		expression: 'Cron-Ausdruck',
+		copy: 'Kopieren',
+		copied: 'Kopiert',
+		humanReadable: 'Klartext',
+		nextRun: 'Nächster Lauf',
+		legend: 'Cron-Referenz',
+		shortcuts: 'Häufige Kurzformen',
+		invalid: 'Ungültiger Cron-Ausdruck. Verwende fünf Felder oder eine unterstützte Kurzform wie @daily.',
+		noRun: 'Kein nächster Lauf im Suchfenster gefunden.',
+		at: 'um',
+		nickname: 'Kurzform',
+		defaultDescription: 'Läuft nach Zeitplan',
+		openExample: 'Beispiel laden',
+		backToTools: 'Zurück zu den Tools',
+		minute: 'Minute',
+		hour: 'Stunde',
+		dayOfMonth: 'Tag im Monat',
+		month: 'Monat',
+		dayOfWeek: 'Wochentag',
+	},
+	pt: {
+		title: 'Gerador de Crontab',
+		metaTitle: 'Gerador de Crontab | Linux Dork',
+		metaDescription: 'Monte expressões cron para Linux, traduza para linguagem natural e veja a próxima execução.',
+		lead: 'Monte e valide agendamentos cron no Linux sem decorar todas as combinações de campos.',
+		expression: 'Expressão cron',
+		copy: 'Copiar',
+		copied: 'Copiado',
+		humanReadable: 'Em linguagem natural',
+		nextRun: 'Próxima execução',
+		legend: 'Referência cron',
+		shortcuts: 'Atalhos comuns',
+		invalid: 'Expressão cron inválida. Use cinco campos ou um atalho suportado como @daily.',
+		noRun: 'Nenhuma próxima execução encontrada na janela de busca.',
+		at: 'em',
+		nickname: 'Atalho',
+		defaultDescription: 'Executa no agendamento',
+		openExample: 'Carregar exemplo',
+		backToTools: 'Voltar para Ferramentas',
+		minute: 'Minuto',
+		hour: 'Hora',
+		dayOfMonth: 'Dia do mês',
+		month: 'Mês',
+		dayOfWeek: 'Dia da semana',
+	},
+	es: {
+		title: 'Generador de Crontab',
+		metaTitle: 'Generador de Crontab | Linux Dork',
+		metaDescription: 'Crea expresiones cron para Linux, tradúcelas a lenguaje natural y revisa la próxima ejecución.',
+		lead: 'Crea y valida horarios cron en Linux sin memorizar todas las combinaciones de campos.',
+		expression: 'Expresión cron',
+		copy: 'Copiar',
+		copied: 'Copiado',
+		humanReadable: 'Descripción legible',
+		nextRun: 'Próxima ejecución',
+		legend: 'Referencia cron',
+		shortcuts: 'Atajos comunes',
+		invalid: 'Expresión cron no válida. Usa cinco campos o un atajo compatible como @daily.',
+		noRun: 'No se encontró una próxima ejecución dentro de la ventana de búsqueda.',
+		at: 'a las',
+		nickname: 'Atajo',
+		defaultDescription: 'Se ejecuta con el horario',
+		openExample: 'Cargar ejemplo',
+		backToTools: 'Volver a Herramientas',
+		minute: 'Minuto',
+		hour: 'Hora',
+		dayOfMonth: 'Día del mes',
+		month: 'Mes',
+		dayOfWeek: 'Día de la semana',
+	},
+	fr: {
+		title: 'Générateur de Crontab',
+		metaTitle: 'Générateur de Crontab | Linux Dork',
+		metaDescription: 'Créez des expressions cron Linux, traduisez-les en clair et vérifiez le prochain lancement.',
+		lead: 'Construisez et vérifiez des planifications cron Linux sans mémoriser chaque combinaison.',
+		expression: 'Expression cron',
+		copy: 'Copier',
+		copied: 'Copié',
+		humanReadable: 'Description lisible',
+		nextRun: 'Prochaine exécution',
+		legend: 'Référence cron',
+		shortcuts: 'Raccourcis courants',
+		invalid: 'Expression cron invalide. Utilisez cinq champs ou un raccourci pris en charge comme @daily.',
+		noRun: 'Aucune prochaine exécution trouvée dans la fenêtre de recherche.',
+		at: 'à',
+		nickname: 'Raccourci',
+		defaultDescription: 'Exécute selon le planning',
+		openExample: 'Charger un exemple',
+		backToTools: 'Retour aux Outils',
+		minute: 'Minute',
+		hour: 'Heure',
+		dayOfMonth: 'Jour du mois',
+		month: 'Mois',
+		dayOfWeek: 'Jour de semaine',
+	},
+	nl: {
+		title: 'Crontab-generator',
+		metaTitle: 'Crontab-generator | Linux Dork',
+		metaDescription: 'Bouw Linux-cronexpressies, vertaal ze naar gewone taal en bekijk de volgende uitvoering.',
+		lead: 'Bouw en controleer Linux-cronschema\'s zonder elke veldcombinatie uit het hoofd te kennen.',
+		expression: 'Cron-expressie',
+		copy: 'Kopiëren',
+		copied: 'Gekopieerd',
+		humanReadable: 'Menselijk leesbaar',
+		nextRun: 'Volgende uitvoering',
+		legend: 'Cron-referentie',
+		shortcuts: 'Veelgebruikte snelkoppelingen',
+		invalid: 'Ongeldige cron-expressie. Gebruik vijf velden of een ondersteunde snelkoppeling zoals @daily.',
+		noRun: 'Geen volgende uitvoering gevonden binnen het zoekvenster.',
+		at: 'om',
+		nickname: 'Snelkoppeling',
+		defaultDescription: 'Draait volgens schema',
+		openExample: 'Voorbeeld laden',
+		backToTools: 'Terug naar Tools',
+		minute: 'Minuut',
+		hour: 'Uur',
+		dayOfMonth: 'Dag van maand',
+		month: 'Maand',
+		dayOfWeek: 'Dag van week',
+	},
+	it: {
+		title: 'Generatore di Crontab',
+		metaTitle: 'Generatore di Crontab | Linux Dork',
+		metaDescription: 'Crea espressioni cron per Linux, traducile in linguaggio naturale e controlla la prossima esecuzione.',
+		lead: 'Crea e verifica pianificazioni cron Linux senza memorizzare ogni combinazione di campi.',
+		expression: 'Espressione cron',
+		copy: 'Copia',
+		copied: 'Copiato',
+		humanReadable: 'Descrizione leggibile',
+		nextRun: 'Prossima esecuzione',
+		legend: 'Riferimento cron',
+		shortcuts: 'Scorciatoie comuni',
+		invalid: 'Espressione cron non valida. Usa cinque campi o una scorciatoia supportata come @daily.',
+		noRun: 'Nessuna prossima esecuzione trovata nella finestra di ricerca.',
+		at: 'alle',
+		nickname: 'Scorciatoia',
+		defaultDescription: 'Viene eseguito secondo la pianificazione',
+		openExample: 'Carica esempio',
+		backToTools: 'Torna a Strumenti',
+		minute: 'Minuto',
+		hour: 'Ora',
+		dayOfMonth: 'Giorno del mese',
+		month: 'Mese',
+		dayOfWeek: 'Giorno della settimana',
+	},
+	zh: {
+		title: 'Crontab 生成器',
+		metaTitle: 'Crontab 生成器 | Linux Dork',
+		metaDescription: '创建 Linux cron 表达式，将其转成自然语言，并查看下一次执行时间。',
+		lead: '在不死记硬背每个字段组合的情况下，构建并验证 Linux cron 计划。',
+		expression: 'Cron 表达式',
+		copy: '复制',
+		copied: '已复制',
+		humanReadable: '自然语言说明',
+		nextRun: '下一次运行',
+		legend: 'Cron 参考',
+		shortcuts: '常用快捷方式',
+		invalid: '无效的 cron 表达式。请使用五个字段，或使用如 @daily 这样的受支持快捷方式。',
+		noRun: '在搜索窗口内未找到下一次运行时间。',
+		at: '在',
+		nickname: '快捷方式',
+		defaultDescription: '按以下计划运行',
+		openExample: '加载示例',
+		backToTools: '返回工具页',
+		minute: '分钟',
+		hour: '小时',
+		dayOfMonth: '每月日期',
+		month: '月份',
+		dayOfWeek: '星期几',
+	},
+};
+
+const t = copy[locale];
+const toolPath = withLocale(locale, '/tools/crontab-generator');
+const toolsPath = withLocale(locale, '/tools');
+const supplementalCopy: Record<Locale, {
+	guideTitle: string;
+	guideIntro: string;
+	useTitle: string;
+	useBody: string;
+	casesTitle: string;
+	cases: string[];
+	faqTitle: string;
+	faq: Array<{ question: string; answer: string }>;
+}> = {
+	en: {
+		guideTitle: 'Linux Crontab Syntax Guide',
+		guideIntro:
+			'This Linux cron schedule generator is built for practical server and homelab workflows. If you need a fast crontab expression parser, this page helps you test syntax, verify timing, and reduce mistakes before saving jobs in /etc/crontab or user-level crontabs.',
+		useTitle: 'How To Use This Cron Schedule Generator',
+		useBody:
+			'Enter a five-field cron expression such as 5 4 * * *, or use a shortcut like @daily and @weekly. The tool translates cron syntax into plain language and computes the next execution time so you can validate Linux automation jobs with confidence.',
+		casesTitle: 'Common Linux Crontab Use Cases',
+		cases: [
+			'Nightly backups and snapshot jobs',
+			'Log rotation and cleanup automation',
+			'Service health checks and alert scripts',
+			'Package update reminders and maintenance tasks',
+		],
+		faqTitle: 'Cron FAQ For Linux',
+		faq: [
+			{
+				question: 'What is a cron expression in Linux?',
+				answer:
+					'A cron expression is a five-field schedule format used by crontab in Linux to run commands automatically. The fields define minute, hour, day of month, month, and day of week.',
+			},
+			{
+				question: 'How do I test a crontab schedule before using it on a server?',
+				answer:
+					'Use a cron schedule generator to parse the expression, read the plain-language output, and verify the next run time. This catches common mistakes before saving jobs in /etc/crontab or user crontabs.',
+			},
+			{
+				question: 'What is the difference between cron and crontab?',
+				answer:
+					'Cron is the Linux background service that executes scheduled jobs. Crontab is the table or file format where those schedules and commands are defined.',
+			},
+		],
+	},
+	de: {
+		guideTitle: 'Linux-Crontab-Syntaxleitfaden',
+		guideIntro:
+			'Dieser Linux-Cron-Schedule-Generator ist für praktische Server- und Homelab-Workflows gebaut. Wenn du einen schnellen Crontab-Parser brauchst, hilft dir diese Seite dabei, Syntax und Laufzeiten zu prüfen, bevor Jobs in /etc/crontab oder Benutzer-Crontabs gespeichert werden.',
+		useTitle: 'So nutzt du diesen Cron-Generator',
+		useBody:
+			'Gib einen Cron-Ausdruck mit fünf Feldern ein, zum Beispiel 5 4 * * *, oder nutze Kurzformen wie @daily und @weekly. Das Tool übersetzt die Syntax in Klartext und berechnet den nächsten Laufzeitpunkt.',
+		casesTitle: 'Häufige Linux-Crontab-Anwendungsfälle',
+		cases: [
+			'Nächtliche Backups und Snapshot-Jobs',
+			'Logrotation und automatische Bereinigung',
+			'Service-Healthchecks und Alert-Skripte',
+			'Paket-Update-Erinnerungen und Wartungsaufgaben',
+		],
+		faqTitle: 'Cron-FAQ für Linux',
+		faq: [
+			{
+				question: 'Was ist ein Cron-Ausdruck unter Linux?',
+				answer:
+					'Ein Cron-Ausdruck ist ein Zeitplanformat mit fünf Feldern, das von Crontab genutzt wird, um Befehle automatisch auszuführen: Minute, Stunde, Tag im Monat, Monat und Wochentag.',
+			},
+			{
+				question: 'Wie teste ich einen Crontab-Zeitplan vor dem Einsatz auf einem Server?',
+				answer:
+					'Nutze einen Cron-Generator, um den Ausdruck zu parsen, die Klartextbeschreibung zu lesen und den nächsten Lauf zu prüfen. So vermeidest du typische Fehler vor dem Speichern in /etc/crontab oder Benutzer-Crontabs.',
+			},
+			{
+				question: 'Was ist der Unterschied zwischen cron und crontab?',
+				answer:
+					'Cron ist der Hintergrunddienst unter Linux, der Jobs ausführt. Crontab ist die Tabelle bzw. das Dateiformat, in dem Zeitpläne und Befehle definiert werden.',
+			},
+		],
+	},
+	pt: {
+		guideTitle: 'Guia de Sintaxe Crontab no Linux',
+		guideIntro:
+			'Este gerador de cron para Linux foi feito para fluxos práticos de servidor e homelab. Se você precisa de um parser rápido de expressões crontab, esta página ajuda a validar sintaxe e horário antes de salvar em /etc/crontab ou no crontab do usuário.',
+		useTitle: 'Como usar este gerador de cron',
+		useBody:
+			'Digite uma expressão cron de cinco campos, como 5 4 * * *, ou use atalhos como @daily e @weekly. A ferramenta traduz a sintaxe para linguagem natural e calcula a próxima execução.',
+		casesTitle: 'Casos comuns de uso de crontab no Linux',
+		cases: [
+			'Backups noturnos e snapshots',
+			'Rotação de logs e limpeza automática',
+			'Health checks de serviços e scripts de alerta',
+			'Lembretes de atualização de pacotes e manutenção',
+		],
+		faqTitle: 'FAQ de Cron para Linux',
+		faq: [
+			{
+				question: 'O que é uma expressão cron no Linux?',
+				answer:
+					'Uma expressão cron é um formato de agendamento com cinco campos usado pelo crontab no Linux para executar comandos automaticamente: minuto, hora, dia do mês, mês e dia da semana.',
+			},
+			{
+				question: 'Como testar um agendamento crontab antes de usar em servidor?',
+				answer:
+					'Use um gerador de cron para interpretar a expressão, ler a descrição em linguagem natural e verificar a próxima execução. Isso evita erros comuns antes de salvar no /etc/crontab ou no crontab do usuário.',
+			},
+			{
+				question: 'Qual a diferença entre cron e crontab?',
+				answer:
+					'Cron é o serviço em segundo plano do Linux que executa tarefas agendadas. Crontab é a tabela ou o formato de arquivo onde os agendamentos e comandos são definidos.',
+			},
+		],
+	},
+	es: {
+		guideTitle: 'Guía de sintaxis Crontab en Linux',
+		guideIntro:
+			'Este generador de cron para Linux está pensado para flujos prácticos de servidor y homelab. Si necesitas un parser rápido de expresiones crontab, esta página te ayuda a validar la sintaxis y el horario antes de guardar tareas en /etc/crontab o en crontabs de usuario.',
+		useTitle: 'Cómo usar este generador de cron',
+		useBody:
+			'Introduce una expresión cron de cinco campos como 5 4 * * *, o usa atajos como @daily y @weekly. La herramienta traduce la sintaxis a lenguaje natural y calcula la próxima ejecución.',
+		casesTitle: 'Casos comunes de uso de crontab en Linux',
+		cases: [
+			'Copias de seguridad nocturnas y snapshots',
+			'Rotación de logs y limpieza automática',
+			'Comprobaciones de salud de servicios y scripts de alerta',
+			'Recordatorios de actualización de paquetes y mantenimiento',
+		],
+		faqTitle: 'FAQ de Cron para Linux',
+		faq: [
+			{
+				question: '¿Qué es una expresión cron en Linux?',
+				answer:
+					'Una expresión cron es un formato de planificación de cinco campos usado por crontab en Linux para ejecutar comandos automáticamente: minuto, hora, día del mes, mes y día de la semana.',
+			},
+			{
+				question: '¿Cómo pruebo un horario crontab antes de usarlo en un servidor?',
+				answer:
+					'Usa un generador de cron para interpretar la expresión, leer la descripción en lenguaje natural y verificar la próxima ejecución. Así evitas errores comunes antes de guardar tareas en /etc/crontab o en crontabs de usuario.',
+			},
+			{
+				question: '¿Cuál es la diferencia entre cron y crontab?',
+				answer:
+					'Cron es el servicio en segundo plano de Linux que ejecuta tareas programadas. Crontab es la tabla o formato de archivo donde se definen esas tareas y horarios.',
+			},
+		],
+	},
+	fr: {
+		guideTitle: 'Guide de syntaxe Crontab Linux',
+		guideIntro:
+			'Ce générateur de planning cron Linux est conçu pour des workflows concrets sur serveur et homelab. Si vous avez besoin d\'un parseur d\'expressions crontab rapide, cette page vous aide à valider la syntaxe et l\'horaire avant d\'enregistrer vos tâches dans /etc/crontab ou dans les crontabs utilisateur.',
+		useTitle: 'Comment utiliser ce générateur cron',
+		useBody:
+			'Saisissez une expression cron à cinq champs comme 5 4 * * *, ou utilisez des raccourcis comme @daily et @weekly. L\'outil traduit la syntaxe en langage clair et calcule la prochaine exécution.',
+		casesTitle: 'Cas d\'usage courants de crontab sous Linux',
+		cases: [
+			'Sauvegardes nocturnes et snapshots',
+			'Rotation des logs et nettoyage automatique',
+			'Contrôles de santé des services et scripts d\'alerte',
+			'Rappels de mise à jour des paquets et maintenance',
+		],
+		faqTitle: 'FAQ Cron Linux',
+		faq: [
+			{
+				question: 'Qu\'est-ce qu\'une expression cron sous Linux ?',
+				answer:
+					'Une expression cron est un format de planification à cinq champs utilisé par crontab sous Linux pour exécuter des commandes automatiquement : minute, heure, jour du mois, mois et jour de semaine.',
+			},
+			{
+				question: 'Comment tester une planification crontab avant de l\'utiliser sur un serveur ?',
+				answer:
+					'Utilisez un générateur cron pour analyser l\'expression, lire la description en clair et vérifier la prochaine exécution. Cela évite les erreurs courantes avant d\'enregistrer dans /etc/crontab ou dans les crontabs utilisateur.',
+			},
+			{
+				question: 'Quelle est la différence entre cron et crontab ?',
+				answer:
+					'Cron est le service Linux en arrière-plan qui exécute les tâches planifiées. Crontab est la table ou le format de fichier où ces tâches et leurs horaires sont définis.',
+			},
+		],
+	},
+	nl: {
+		guideTitle: 'Linux Crontab-syntaxgids',
+		guideIntro:
+			'Deze Linux cron-planningsgenerator is gemaakt voor praktische server- en homelab-workflows. Als je een snelle crontab-expressieparser nodig hebt, helpt deze pagina je om syntaxis en timing te controleren voordat je jobs opslaat in /etc/crontab of gebruikers-crontabs.',
+		useTitle: 'Hoe je deze cron-generator gebruikt',
+		useBody:
+			'Voer een cron-expressie met vijf velden in, zoals 5 4 * * *, of gebruik snelkoppelingen zoals @daily en @weekly. De tool vertaalt de syntaxis naar gewone taal en berekent de volgende uitvoering.',
+		casesTitle: 'Veelvoorkomende Linux crontab-gebruikssituaties',
+		cases: [
+			'Nachtelijke back-ups en snapshots',
+			'Logrotatie en automatische opschoning',
+			'Servicecontroles en waarschuwingsscripts',
+			'Herinneringen voor pakketupdates en onderhoud',
+		],
+		faqTitle: 'Cron FAQ voor Linux',
+		faq: [
+			{
+				question: 'Wat is een cron-expressie in Linux?',
+				answer:
+					'Een cron-expressie is een planningsformaat met vijf velden dat door crontab in Linux wordt gebruikt om opdrachten automatisch uit te voeren: minuut, uur, dag van de maand, maand en dag van de week.',
+			},
+			{
+				question: 'Hoe test ik een crontab-planning voordat ik die op een server gebruik?',
+				answer:
+					'Gebruik een cron-generator om de expressie te parseren, de leesbare beschrijving te bekijken en de volgende uitvoering te controleren. Zo voorkom je veelgemaakte fouten voordat je opslaat in /etc/crontab of gebruikers-crontabs.',
+			},
+			{
+				question: 'Wat is het verschil tussen cron en crontab?',
+				answer:
+					'Cron is de Linux-achtergronddienst die geplande taken uitvoert. Crontab is de tabel of het bestandsformaat waarin die schema\'s en opdrachten staan.',
+			},
+		],
+	},
+	it: {
+		guideTitle: 'Guida alla sintassi Crontab Linux',
+		guideIntro:
+			'Questo generatore di pianificazioni cron Linux è pensato per workflow pratici su server e homelab. Se ti serve un parser veloce di espressioni crontab, questa pagina ti aiuta a verificare sintassi e orari prima di salvare i job in /etc/crontab o nei crontab utente.',
+		useTitle: 'Come usare questo generatore cron',
+		useBody:
+			'Inserisci un\'espressione cron a cinque campi, ad esempio 5 4 * * *, oppure usa scorciatoie come @daily e @weekly. Lo strumento traduce la sintassi in linguaggio naturale e calcola la prossima esecuzione.',
+		casesTitle: 'Casi d\'uso comuni di crontab su Linux',
+		cases: [
+			'Backup notturni e job di snapshot',
+			'Rotazione log e pulizia automatica',
+			'Controlli di stato dei servizi e script di alert',
+			'Promemoria aggiornamenti pacchetti e manutenzione',
+		],
+		faqTitle: 'FAQ Cron per Linux',
+		faq: [
+			{
+				question: 'Che cos\'è un\'espressione cron in Linux?',
+				answer:
+					'Un\'espressione cron è un formato di pianificazione a cinque campi usato da crontab in Linux per eseguire comandi automaticamente: minuto, ora, giorno del mese, mese e giorno della settimana.',
+			},
+			{
+				question: 'Come posso testare una pianificazione crontab prima di usarla su un server?',
+				answer:
+					'Usa un generatore cron per analizzare l\'espressione, leggere la descrizione in linguaggio naturale e verificare la prossima esecuzione. In questo modo eviti errori comuni prima di salvare in /etc/crontab o nei crontab utente.',
+			},
+			{
+				question: 'Qual è la differenza tra cron e crontab?',
+				answer:
+					'Cron è il servizio Linux in background che esegue i job pianificati. Crontab è la tabella o il formato file in cui sono definiti orari e comandi.',
+			},
+		],
+	},
+	zh: {
+		guideTitle: 'Linux Crontab 语法指南',
+		guideIntro:
+			'这个 Linux cron 计划生成器面向实际的服务器与 homelab 工作流。如果你需要一个快速的 crontab 表达式解析器，这个页面可以在你把任务写入 /etc/crontab 或用户 crontab 之前，先验证语法和执行时间。',
+		useTitle: '如何使用这个 Cron 计划生成器',
+		useBody:
+			'输入一个五字段 cron 表达式，例如 5 4 * * *，或者使用 @daily、@weekly 等快捷方式。工具会把语法转换成自然语言，并计算下一次执行时间。',
+		casesTitle: 'Linux Crontab 常见使用场景',
+		cases: [
+			'夜间备份和快照任务',
+			'日志轮转与自动清理',
+			'服务健康检查与告警脚本',
+			'软件包更新提醒与维护任务',
+		],
+		faqTitle: 'Linux Cron 常见问题',
+		faq: [
+			{
+				question: 'Linux 中的 cron 表达式是什么？',
+				answer:
+					'cron 表达式是 Linux 中 crontab 使用的五字段调度格式，用于自动执行命令。字段分别表示分钟、小时、每月日期、月份和星期几。',
+			},
+			{
+				question: '在服务器上使用前，如何测试 crontab 计划？',
+				answer:
+					'可以使用 cron 计划生成器来解析表达式、查看自然语言说明，并确认下一次运行时间。这样能在写入 /etc/crontab 或用户 crontab 前减少常见错误。',
+			},
+			{
+				question: 'cron 和 crontab 有什么区别？',
+				answer:
+					'cron 是 Linux 后台调度服务，负责执行定时任务；crontab 是定义这些任务与时间规则的表或文件格式。',
+			},
+		],
+	},
+};
+const seo = supplementalCopy[locale];
+const faqEntries = seo.faq;
+const faqJsonLd = JSON.stringify({
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: faqEntries.map((entry) => ({
+		'@type': 'Question',
+		name: entry.question,
+		acceptedAnswer: {
+			'@type': 'Answer',
+			text: entry.answer,
+		},
+	})),
+});
+---
+
+<!doctype html>
+<html lang={locale}>
+	<head>
+		<BaseHead title={t.metaTitle} description={t.metaDescription} />
+		<script type="application/ld+json" set:html={faqJsonLd}></script>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="surface-card hero scan-lines">
+				<div class="terminal-pill">crontab -e</div>
+				<h1>{t.title}</h1>
+				<p class="lead">{t.lead}</p>
+				<a class="back-link" href={toolsPath}>{t.backToTools}</a>
+			</section>
+
+			<section class="tool-grid">
+				<article
+					class="surface-card builder"
+					id="cron-tool"
+					data-copy-label={t.copy}
+					data-copied-label={t.copied}
+					data-invalid-label={t.invalid}
+					data-no-run-label={t.noRun}
+					data-at-label={t.at}
+					data-default-description={t.defaultDescription}
+				>
+					<div class="section-label">{t.expression}</div>
+					<div class="input-row">
+						<input id="cron-expression" type="text" value="5 4 * * *" spellcheck="false" aria-label={t.expression} />
+						<button id="copy-expression" type="button">{t.copy}</button>
+					</div>
+					<div class="preset-row" aria-label={t.shortcuts}>
+						<button type="button" data-preset="5 4 * * *">{t.openExample}</button>
+						<button type="button" data-preset="@hourly">@hourly</button>
+						<button type="button" data-preset="@daily">@daily</button>
+						<button type="button" data-preset="*/15 * * * *">*/15</button>
+						<button type="button" data-preset="0 0 * * 0">0 0 * * 0</button>
+					</div>
+
+					<div class="result-grid">
+						<div>
+							<div class="section-label">{t.humanReadable}</div>
+							<p id="cron-description" class="result-text">At 04:05.</p>
+						</div>
+						<div>
+							<div class="section-label">{t.nextRun}</div>
+							<p id="next-run" class="result-text">at 2026-03-16 04:05:00</p>
+						</div>
+					</div>
+
+					<pre><code id="cron-output">5 4 * * *</code></pre>
+					<p id="cron-error" class="error-message" hidden></p>
+				</article>
+
+				<article class="surface-card reference">
+					<h2>{t.legend}</h2>
+					<div class="legend-grid">
+						<div><strong>{t.minute}</strong><span>0-59</span></div>
+						<div><strong>{t.hour}</strong><span>0-23</span></div>
+						<div><strong>{t.dayOfMonth}</strong><span>1-31</span></div>
+						<div><strong>{t.month}</strong><span>1-12</span></div>
+						<div><strong>{t.dayOfWeek}</strong><span>0-7</span></div>
+					</div>
+
+					<table>
+						<tbody>
+							<tr><td>*</td><td>any value</td></tr>
+							<tr><td>,</td><td>value list separator</td></tr>
+							<tr><td>-</td><td>range of values</td></tr>
+							<tr><td>/</td><td>step values</td></tr>
+							<tr><td>@yearly</td><td>non-standard</td></tr>
+							<tr><td>@annually</td><td>non-standard</td></tr>
+							<tr><td>@monthly</td><td>non-standard</td></tr>
+							<tr><td>@weekly</td><td>non-standard</td></tr>
+							<tr><td>@daily</td><td>non-standard</td></tr>
+							<tr><td>@hourly</td><td>non-standard</td></tr>
+							<tr><td>@reboot</td><td>non-standard</td></tr>
+						</tbody>
+					</table>
+				</article>
+			</section>
+
+			<section class="surface-card seo-copy">
+				<h2>{seo.guideTitle}</h2>
+				<p>{seo.guideIntro}</p>
+				<h3>{seo.useTitle}</h3>
+				<p>{seo.useBody}</p>
+				<h3>{seo.casesTitle}</h3>
+				<ul>
+					{seo.cases.map((item) => <li>{item}</li>)}
+				</ul>
+			</section>
+
+			<section class="surface-card faq-copy" aria-label="Cron FAQ">
+				<h2>{seo.faqTitle}</h2>
+				{
+					faqEntries.map((entry) => (
+						<article class="faq-item">
+							<h3>{entry.question}</h3>
+							<p>{entry.answer}</p>
+						</article>
+					))
+				}
+			</section>
+		</main>
+		<Footer />
+
+		<script is:inline define:vars={{ toolPath }}>
+			const root = document.getElementById('cron-tool');
+			const input = document.getElementById('cron-expression');
+			const output = document.getElementById('cron-output');
+			const description = document.getElementById('cron-description');
+			const nextRun = document.getElementById('next-run');
+			const error = document.getElementById('cron-error');
+			const copyButton = document.getElementById('copy-expression');
+			const presetButtons = Array.from(document.querySelectorAll('[data-preset]'));
+
+			const labels = {
+				copy: root?.dataset.copyLabel || 'Copy',
+				copied: root?.dataset.copiedLabel || 'Copied',
+				invalid: root?.dataset.invalidLabel || 'Invalid cron expression.',
+				noRun: root?.dataset.noRunLabel || 'No next run found.',
+				at: root?.dataset.atLabel || 'at',
+				defaultDescription: root?.dataset.defaultDescription || 'Runs on schedule',
+			};
+
+			const nicknameMap = {
+				'@yearly': '0 0 1 1 *',
+				'@annually': '0 0 1 1 *',
+				'@monthly': '0 0 1 * *',
+				'@weekly': '0 0 * * 0',
+				'@daily': '0 0 * * *',
+				'@hourly': '0 * * * *',
+			};
+
+			const nicknameDescriptions = {
+				'@yearly': 'Once a year at 00:00 on January 1.',
+				'@annually': 'Once a year at 00:00 on January 1.',
+				'@monthly': 'Once a month at 00:00 on day 1.',
+				'@weekly': 'Once a week at 00:00 on Sunday.',
+				'@daily': 'Once a day at 00:00.',
+				'@hourly': 'Once an hour at minute 00.',
+				'@reboot': 'When the system boots.',
+			};
+
+			function pad(value) {
+				return String(value).padStart(2, '0');
+			}
+
+			function formatDate(date) {
+				return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:00`;
+			}
+
+			function expandExpression(expression) {
+				const value = expression.trim();
+				if (value in nicknameMap) return nicknameMap[value];
+				return value;
+			}
+
+			function buildField(field, min, max, normalize = (value) => value) {
+				if (field === '*') return { any: true, values: new Set(Array.from({ length: max - min + 1 }, (_, index) => normalize(index + min))) };
+
+				const values = new Set();
+				for (const part of field.split(',')) {
+					const [base, stepText] = part.split('/');
+					const step = stepText ? Number.parseInt(stepText, 10) : 1;
+					if (!Number.isInteger(step) || step < 1) throw new Error('Invalid step');
+
+					let start;
+					let end;
+					if (base === '*') {
+						start = min;
+						end = max;
+					} else if (base.includes('-')) {
+						const [startText, endText] = base.split('-');
+						start = Number.parseInt(startText, 10);
+						end = Number.parseInt(endText, 10);
+					} else {
+						start = Number.parseInt(base, 10);
+						end = start;
+					}
+
+					if (!Number.isInteger(start) || !Number.isInteger(end) || start > end) throw new Error('Invalid range');
+					for (let value = start; value <= end; value += step) {
+						const normalized = normalize(value);
+						if (normalized < min || normalized > max) throw new Error('Value out of range');
+						values.add(normalized);
+					}
+				}
+
+				if (values.size === 0) throw new Error('Empty field');
+				return { any: false, values };
+			}
+
+			function parseCron(expression) {
+				const raw = expression.trim();
+				if (raw === '@reboot') {
+					return { reboot: true, raw };
+				}
+
+				const expanded = expandExpression(raw);
+				const fields = expanded.split(/\s+/);
+				if (fields.length !== 5) throw new Error('Wrong field count');
+
+				return {
+					reboot: false,
+					raw,
+					minute: buildField(fields[0], 0, 59),
+					hour: buildField(fields[1], 0, 23),
+					dayOfMonth: buildField(fields[2], 1, 31),
+					month: buildField(fields[3], 1, 12),
+					dayOfWeek: buildField(fields[4], 0, 6, (value) => (value === 7 ? 0 : value)),
+				};
+			}
+
+			function matchesDate(schedule, date) {
+				if (schedule.reboot) return false;
+				const minuteMatch = schedule.minute.values.has(date.getMinutes());
+				const hourMatch = schedule.hour.values.has(date.getHours());
+				const monthMatch = schedule.month.values.has(date.getMonth() + 1);
+				const dayOfMonthMatch = schedule.dayOfMonth.values.has(date.getDate());
+				const dayOfWeekMatch = schedule.dayOfWeek.values.has(date.getDay());
+
+				if (!minuteMatch || !hourMatch || !monthMatch) return false;
+
+				if (schedule.dayOfMonth.any && schedule.dayOfWeek.any) return true;
+				if (schedule.dayOfMonth.any) return dayOfWeekMatch;
+				if (schedule.dayOfWeek.any) return dayOfMonthMatch;
+				return dayOfMonthMatch || dayOfWeekMatch;
+			}
+
+			function findNextRun(schedule) {
+				if (schedule.reboot) return null;
+				const candidate = new Date();
+				candidate.setSeconds(0, 0);
+				candidate.setMinutes(candidate.getMinutes() + 1);
+
+				for (let index = 0; index < 60 * 24 * 366 * 2; index += 1) {
+					if (matchesDate(schedule, candidate)) return new Date(candidate);
+					candidate.setMinutes(candidate.getMinutes() + 1);
+				}
+
+				return null;
+			}
+
+			function humanize(expression, schedule) {
+				if (expression in nicknameDescriptions) return nicknameDescriptions[expression];
+				if (schedule.reboot) return nicknameDescriptions['@reboot'];
+
+				const minuteValues = Array.from(schedule.minute.values).sort((a, b) => a - b);
+				const hourValues = Array.from(schedule.hour.values).sort((a, b) => a - b);
+				const raw = expandExpression(expression).split(/\s+/);
+				const minuteField = raw[0];
+				const hourField = raw[1];
+
+				if (!schedule.dayOfMonth.any || !schedule.month.any || !schedule.dayOfWeek.any) {
+					return `${labels.defaultDescription} ${expression}.`;
+				}
+
+				if (!schedule.minute.any && !schedule.hour.any && minuteValues.length === 1 && hourValues.length === 1) {
+					return `At ${pad(hourValues[0])}:${pad(minuteValues[0])}.`;
+				}
+
+				if (minuteField.startsWith('*/') && schedule.hour.any) {
+					return `Every ${minuteField.slice(2)} minutes.`;
+				}
+
+				if (!schedule.minute.any && schedule.hour.any && minuteValues.length === 1) {
+					return `At minute ${pad(minuteValues[0])} past every hour.`;
+				}
+
+				if (schedule.minute.any && !schedule.hour.any && hourValues.length === 1) {
+					return `Every minute during the ${pad(hourValues[0])}:00 hour.`;
+				}
+
+				return `${labels.defaultDescription} ${expression}.`;
+			}
+
+			async function copyExpression() {
+				if (!input || !copyButton) return;
+				await navigator.clipboard.writeText(input.value.trim());
+				copyButton.textContent = labels.copied;
+				window.setTimeout(() => {
+					copyButton.textContent = labels.copy;
+				}, 1200);
+			}
+
+			function render() {
+				if (!input || !output || !description || !nextRun || !error) return;
+				const expression = input.value.trim();
+				output.textContent = expression;
+
+				try {
+					const schedule = parseCron(expression);
+					description.textContent = humanize(expression, schedule);
+					const next = findNextRun(schedule);
+					nextRun.textContent = next ? `${labels.at} ${formatDate(next)}` : labels.noRun;
+					error.hidden = true;
+					error.textContent = '';
+				} catch {
+					description.textContent = labels.invalid;
+					nextRun.textContent = labels.noRun;
+					error.hidden = false;
+					error.textContent = labels.invalid;
+				}
+			}
+
+			input?.addEventListener('input', render);
+			copyButton?.addEventListener('click', copyExpression);
+			presetButtons.forEach((button) => {
+				button.addEventListener('click', () => {
+					const preset = button.getAttribute('data-preset');
+					if (!preset || !input) return;
+					input.value = preset;
+					render();
+				});
+			});
+
+			render();
+		</script>
+	</body>
+</html>
+
+<style>
+	.hero {
+		padding: clamp(1.2rem, 4vw, 2.2rem);
+	}
+	.lead {
+		max-width: 68ch;
+		font-size: clamp(1rem, 2.5vw, 1.15rem);
+	}
+	.back-link {
+		display: inline-flex;
+		margin-top: 1rem;
+		text-decoration: none;
+		font-weight: 700;
+	}
+	.tool-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.95fr);
+		gap: 1rem;
+		margin-top: 1rem;
+	}
+	.builder,
+	.reference {
+		padding: 1.2rem;
+	}
+	.section-label {
+		margin-bottom: 0.45rem;
+		color: var(--date-muted);
+		font-size: 0.82rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+	}
+	.input-row {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 0.75rem;
+	}
+	.input-row input {
+		width: 100%;
+		padding: 0.85rem 1rem;
+		border-radius: 0.95rem;
+		border: 1px solid var(--hero-recent-border);
+		background: var(--surface-soft);
+		color: var(--foreground);
+		font: inherit;
+	}
+	.input-row button,
+	.preset-row button {
+		padding: 0.75rem 0.95rem;
+		border-radius: 999px;
+		border: 1px solid var(--border);
+		background: var(--surface-soft);
+		color: var(--foreground);
+		font: inherit;
+		font-weight: 700;
+		cursor: pointer;
+	}
+	.preset-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		margin: 0.9rem 0 1rem;
+	}
+	.result-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+		margin-bottom: 1rem;
+	}
+	.result-text {
+		margin: 0;
+		font-size: 1.02rem;
+		font-weight: 700;
+		color: var(--title-strong);
+	}
+	.error-message {
+		color: #ff9c88;
+		margin-top: 0.75rem;
+	}
+	.legend-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.8rem;
+		margin: 1rem 0 1.1rem;
+	}
+	.legend-grid div {
+		display: grid;
+		gap: 0.18rem;
+		padding: 0.8rem 0.9rem;
+		border-radius: 0.9rem;
+		border: 1px solid var(--hero-recent-border);
+		background: var(--surface-soft);
+	}
+	table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+	td {
+		padding: 0.55rem 0;
+		border-bottom: 1px solid var(--hero-recent-border);
+		vertical-align: top;
+	}
+	td:first-child {
+		width: 7rem;
+		font-family: 'JetBrains Mono', monospace;
+		font-weight: 700;
+	}
+	.seo-copy {
+		margin-top: 1rem;
+		padding: clamp(1.1rem, 3.4vw, 1.6rem);
+	}
+	.seo-copy h2,
+	.seo-copy h3 {
+		margin-bottom: 0.45rem;
+	}
+	.seo-copy p {
+		margin: 0.35rem 0 0.95rem;
+		max-width: 80ch;
+	}
+	.seo-copy ul {
+		margin: 0.5rem 0 0;
+		padding-left: 1.2rem;
+	}
+	.seo-copy li {
+		margin-bottom: 0.35rem;
+	}
+	.faq-copy {
+		margin-top: 1rem;
+		padding: clamp(1.1rem, 3.4vw, 1.6rem);
+	}
+	.faq-item + .faq-item {
+		margin-top: 1rem;
+		padding-top: 1rem;
+		border-top: 1px solid var(--hero-recent-border);
+	}
+	.faq-item h3 {
+		margin: 0 0 0.4rem;
+	}
+	.faq-item p {
+		margin: 0;
+		max-width: 80ch;
+	}
+	@media (max-width: 900px) {
+		.tool-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+	@media (max-width: 640px) {
+		.input-row,
+		.result-grid,
+		.legend-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
