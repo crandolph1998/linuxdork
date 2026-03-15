@@ -1,0 +1,338 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { getLocaleFromPathname, type Locale, withLocale } from '../i18n/ui';
+
+const locale = getLocaleFromPathname(Astro.url.pathname);
+const updatedOn = 'March 15, 2026';
+
+const policyCopy: Record<
+  Locale,
+  {
+    pageTitle: string;
+    pageDescription: string;
+    heading: string;
+    intro: string;
+    lastUpdated: string;
+    collectTitle: string;
+    collectItems: string[];
+    avoidTitle: string;
+    avoidItems: string[];
+    newsletterTitle: string;
+    newsletterBody: string;
+    cookiesTitle: string;
+    cookiesBody: string;
+    contactTitle: string;
+    contactBody: string;
+    backHome: string;
+  }
+> = {
+  en: {
+    pageTitle: 'Privacy Policy | Linux Dork',
+    pageDescription: 'Simple privacy policy for Linux Dork covering analytics, newsletter signup placeholders, and contact preferences.',
+    heading: 'Privacy Policy',
+    intro:
+      'Linux Dork is a content and tools website. We keep this policy simple: we only collect what is needed to run the site, understand basic usage, and deliver optional newsletter updates.',
+    lastUpdated: 'Last updated',
+    collectTitle: 'What We Collect',
+    collectItems: [
+      'Basic server logs (for security and troubleshooting).',
+      'Aggregate analytics data (page views, top pages, traffic sources).',
+      'Email address only if you submit the newsletter form.',
+    ],
+    avoidTitle: 'What We Do Not Collect',
+    avoidItems: [
+      'No sensitive personal data is intentionally requested.',
+      'No sale of personal data.',
+      'No account profiles or behavioral fingerprinting by design.',
+    ],
+    newsletterTitle: 'Newsletter',
+    newsletterBody:
+      'Newsletter signup is currently a placeholder Sendy form integration. When enabled, your email address will only be used for Linux Dork updates and can be unsubscribed at any time through the email footer.',
+    cookiesTitle: 'Cookies',
+    cookiesBody:
+      'This site may use minimal cookies for analytics or performance. You can disable cookies in your browser, though some analytics functionality may be reduced.',
+    contactTitle: 'Contact',
+    contactBody:
+      'For privacy-related requests, use the contact details you publish for Linux Dork. We will update this policy as the site evolves.',
+    backHome: 'Return to home',
+  },
+  de: {
+    pageTitle: 'Datenschutzerklarung | Linux Dork',
+    pageDescription: 'Einfache Datenschutzerklarung fur Linux Dork mit Infos zu Analytics, Newsletter und Kontakt.',
+    heading: 'Datenschutzerklarung',
+    intro:
+      'Linux Dork ist eine Website mit Inhalten und Tools. Diese Richtlinie ist bewusst einfach: Es werden nur Daten verarbeitet, die fur den Betrieb der Seite, grundlegende Nutzungsauswertung und optionale Newsletter-Updates notwendig sind.',
+    lastUpdated: 'Zuletzt aktualisiert',
+    collectTitle: 'Welche Daten wir erfassen',
+    collectItems: [
+      'Basis-Serverlogs (fur Sicherheit und Fehleranalyse).',
+      'Aggregierte Analytics-Daten (Seitenaufrufe, beliebte Seiten, Quellen).',
+      'E-Mail-Adresse nur bei Newsletter-Anmeldung.',
+    ],
+    avoidTitle: 'Welche Daten wir nicht erfassen',
+    avoidItems: [
+      'Es werden keine sensiblen personenbezogenen Daten absichtlich abgefragt.',
+      'Keine Weitergabe oder Verkauf personenbezogener Daten.',
+      'Keine Nutzerprofile oder Fingerprinting-by-Design.',
+    ],
+    newsletterTitle: 'Newsletter',
+    newsletterBody:
+      'Die Newsletter-Anmeldung ist derzeit eine Sendy-Platzhalter-Integration. Wenn aktiviert, wird deine E-Mail nur fur Linux-Dork-Updates genutzt. Eine Abmeldung ist jederzeit uber den Link in der Mail moglich.',
+    cookiesTitle: 'Cookies',
+    cookiesBody:
+      'Diese Website kann minimale Cookies fur Analytics oder Performance nutzen. Du kannst Cookies im Browser deaktivieren, dadurch konnen einzelne Funktionen eingeschrankt sein.',
+    contactTitle: 'Kontakt',
+    contactBody:
+      'Fur Datenschutzanfragen nutze die von Linux Dork bereitgestellten Kontaktdaten. Diese Richtlinie wird bei Anderungen der Website aktualisiert.',
+    backHome: 'Zuruck zur Startseite',
+  },
+  pt: {
+    pageTitle: 'Politica de Privacidade | Linux Dork',
+    pageDescription: 'Politica simples de privacidade do Linux Dork com informacoes sobre analytics, newsletter e contato.',
+    heading: 'Politica de Privacidade',
+    intro:
+      'Linux Dork e um site de conteudo e ferramentas. Mantemos esta politica simples: coletamos apenas o necessario para operar o site, entender uso basico e enviar atualizacoes opcionais de newsletter.',
+    lastUpdated: 'Ultima atualizacao',
+    collectTitle: 'O que coletamos',
+    collectItems: [
+      'Logs basicos do servidor (seguranca e diagnostico).',
+      'Dados agregados de analytics (visualizacoes, paginas mais vistas, origem do trafego).',
+      'Endereco de email apenas se voce enviar o formulario de newsletter.',
+    ],
+    avoidTitle: 'O que nao coletamos',
+    avoidItems: [
+      'Nao solicitamos intencionalmente dados pessoais sensiveis.',
+      'Nao vendemos dados pessoais.',
+      'Nao criamos perfis de conta nem fingerprinting comportamental por padrao.',
+    ],
+    newsletterTitle: 'Newsletter',
+    newsletterBody:
+      'A inscricao de newsletter e atualmente uma integracao placeholder com Sendy. Quando ativa, seu email sera usado apenas para atualizacoes do Linux Dork e voce podera cancelar a inscricao a qualquer momento no rodape do email.',
+    cookiesTitle: 'Cookies',
+    cookiesBody:
+      'Este site pode usar cookies minimos para analytics ou desempenho. Voce pode desativar cookies no navegador, mas algumas funcoes podem ser reduzidas.',
+    contactTitle: 'Contato',
+    contactBody:
+      'Para solicitacoes relacionadas a privacidade, use os contatos publicados pelo Linux Dork. Esta politica sera atualizada conforme o site evoluir.',
+    backHome: 'Voltar para a home',
+  },
+  es: {
+    pageTitle: 'Politica de Privacidad | Linux Dork',
+    pageDescription: 'Politica de privacidad sencilla de Linux Dork sobre analytics, newsletter y contacto.',
+    heading: 'Politica de Privacidad',
+    intro:
+      'Linux Dork es un sitio de contenido y herramientas. Esta politica es simple: solo recopilamos lo necesario para operar el sitio, entender el uso basico y enviar actualizaciones opcionales por newsletter.',
+    lastUpdated: 'Ultima actualizacion',
+    collectTitle: 'Que recopilamos',
+    collectItems: [
+      'Registros basicos del servidor (seguridad y diagnostico).',
+      'Datos agregados de analytics (vistas, paginas populares, fuentes de trafico).',
+      'Correo electronico solo si envias el formulario de newsletter.',
+    ],
+    avoidTitle: 'Que no recopilamos',
+    avoidItems: [
+      'No solicitamos intencionalmente datos personales sensibles.',
+      'No vendemos datos personales.',
+      'No creamos perfiles de cuenta ni fingerprinting de comportamiento por diseno.',
+    ],
+    newsletterTitle: 'Newsletter',
+    newsletterBody:
+      'La suscripcion al newsletter es actualmente una integracion placeholder de Sendy. Cuando este activa, tu correo se usara solo para actualizaciones de Linux Dork y podras cancelar cuando quieras desde el pie del correo.',
+    cookiesTitle: 'Cookies',
+    cookiesBody:
+      'Este sitio puede usar cookies minimas para analytics o rendimiento. Puedes desactivar cookies en tu navegador, aunque algunas funciones de analitica pueden verse reducidas.',
+    contactTitle: 'Contacto',
+    contactBody:
+      'Para solicitudes relacionadas con privacidad, usa los datos de contacto publicados por Linux Dork. Esta politica se actualizara conforme evolucione el sitio.',
+    backHome: 'Volver al inicio',
+  },
+  fr: {
+    pageTitle: 'Politique de Confidentialite | Linux Dork',
+    pageDescription: 'Politique de confidentialite simple de Linux Dork couvrant analytics, newsletter et contact.',
+    heading: 'Politique de Confidentialite',
+    intro:
+      'Linux Dork est un site de contenu et d outils. Cette politique reste simple: nous collectons uniquement ce qui est necessaire pour faire fonctionner le site, comprendre l usage de base et envoyer des mises a jour newsletter optionnelles.',
+    lastUpdated: 'Derniere mise a jour',
+    collectTitle: 'Ce que nous collectons',
+    collectItems: [
+      'Journaux serveur de base (securite et diagnostic).',
+      'Donnees analytics agregees (pages vues, pages populaires, sources de trafic).',
+      'Adresse e-mail uniquement si vous envoyez le formulaire newsletter.',
+    ],
+    avoidTitle: 'Ce que nous ne collectons pas',
+    avoidItems: [
+      'Aucune donnee personnelle sensible n est demandee intentionnellement.',
+      'Aucune vente de donnees personnelles.',
+      'Pas de profils de compte ni de fingerprinting comportemental par conception.',
+    ],
+    newsletterTitle: 'Newsletter',
+    newsletterBody:
+      'L inscription newsletter est actuellement une integration Sendy de demonstration. Lorsqu elle sera active, votre e-mail servira uniquement aux mises a jour Linux Dork, avec desinscription possible a tout moment via le pied d e-mail.',
+    cookiesTitle: 'Cookies',
+    cookiesBody:
+      'Ce site peut utiliser un minimum de cookies pour l analytics ou la performance. Vous pouvez les desactiver dans votre navigateur, mais certaines fonctions peuvent etre reduites.',
+    contactTitle: 'Contact',
+    contactBody:
+      'Pour les demandes liees a la confidentialite, utilisez les coordonnees publiees par Linux Dork. Cette politique sera mise a jour a mesure que le site evolue.',
+    backHome: 'Retour a l accueil',
+  },
+  nl: {
+    pageTitle: 'Privacybeleid | Linux Dork',
+    pageDescription: 'Eenvoudig privacybeleid van Linux Dork over analytics, nieuwsbrief en contact.',
+    heading: 'Privacybeleid',
+    intro:
+      'Linux Dork is een content- en toolsite. Dit beleid houden we simpel: we verzamelen alleen wat nodig is om de site te laten werken, basisgebruik te begrijpen en optionele nieuwsbriefupdates te versturen.',
+    lastUpdated: 'Laatst bijgewerkt',
+    collectTitle: 'Wat we verzamelen',
+    collectItems: [
+      'Basis serverlogs (voor beveiliging en troubleshooting).',
+      'Geaggregeerde analyticsgegevens (pageviews, populaire paginas, verkeersbronnen).',
+      'E-mailadres alleen als je het nieuwsbriefformulier verstuurt.',
+    ],
+    avoidTitle: 'Wat we niet verzamelen',
+    avoidItems: [
+      'Geen gevoelige persoonsgegevens worden bewust opgevraagd.',
+      'Geen verkoop van persoonsgegevens.',
+      'Geen accountprofielen of gedragsfingerprinting by design.',
+    ],
+    newsletterTitle: 'Nieuwsbrief',
+    newsletterBody:
+      'Nieuwsbriefinschrijving is momenteel een placeholder Sendy-integratie. Zodra actief wordt je e-mailadres alleen gebruikt voor Linux Dork-updates, en uitschrijven kan altijd via de footer in de e-mail.',
+    cookiesTitle: 'Cookies',
+    cookiesBody:
+      'Deze site kan minimale cookies gebruiken voor analytics of performance. Je kunt cookies uitschakelen in je browser, maar sommige functies kunnen dan beperkt zijn.',
+    contactTitle: 'Contact',
+    contactBody:
+      'Voor privacyverzoeken gebruik je de contactgegevens die Linux Dork publiceert. Dit beleid wordt bijgewerkt wanneer de site verandert.',
+    backHome: 'Terug naar home',
+  },
+  it: {
+    pageTitle: 'Informativa sulla Privacy | Linux Dork',
+    pageDescription: 'Informativa privacy semplice di Linux Dork su analytics, newsletter e contatti.',
+    heading: 'Informativa sulla Privacy',
+    intro:
+      'Linux Dork e un sito di contenuti e strumenti. Manteniamo questa informativa semplice: raccogliamo solo cio che serve per far funzionare il sito, capire l uso di base e inviare aggiornamenti newsletter facoltativi.',
+    lastUpdated: 'Ultimo aggiornamento',
+    collectTitle: 'Cosa raccogliamo',
+    collectItems: [
+      'Log server di base (sicurezza e troubleshooting).',
+      'Dati analytics aggregati (visualizzazioni, pagine principali, sorgenti di traffico).',
+      'Indirizzo email solo se invii il modulo newsletter.',
+    ],
+    avoidTitle: 'Cosa non raccogliamo',
+    avoidItems: [
+      'Nessun dato personale sensibile viene richiesto intenzionalmente.',
+      'Nessuna vendita di dati personali.',
+      'Nessun profilo account o fingerprinting comportamentale per impostazione.',
+    ],
+    newsletterTitle: 'Newsletter',
+    newsletterBody:
+      'L iscrizione alla newsletter e attualmente un integrazione Sendy placeholder. Quando sara attiva, il tuo indirizzo email verra usato solo per aggiornamenti Linux Dork, con disiscrizione sempre disponibile nel footer delle email.',
+    cookiesTitle: 'Cookie',
+    cookiesBody:
+      'Questo sito puo usare cookie minimi per analytics o prestazioni. Puoi disattivarli nel browser, anche se alcune funzioni potrebbero essere limitate.',
+    contactTitle: 'Contatti',
+    contactBody:
+      'Per richieste relative alla privacy, usa i contatti pubblicati da Linux Dork. Questa informativa verra aggiornata man mano che il sito evolve.',
+    backHome: 'Torna alla home',
+  },
+  zh: {
+    pageTitle: '隐私政策 | Linux Dork',
+    pageDescription: 'Linux Dork 的简明隐私政策，说明分析数据、新闻订阅和联系方式。',
+    heading: '隐私政策',
+    intro: 'Linux Dork 是一个内容与工具网站。我们尽量保持规则简单：只收集运行网站、了解基础使用情况以及发送可选 newsletter 更新所需的数据。',
+    lastUpdated: '最后更新',
+    collectTitle: '我们会收集什么',
+    collectItems: [
+      '基础服务器日志（用于安全和排障）。',
+      '汇总分析数据（访问量、热门页面、流量来源）。',
+      '仅当你提交 newsletter 表单时收集电子邮箱地址。',
+    ],
+    avoidTitle: '我们不会收集什么',
+    avoidItems: [
+      '不会主动索取敏感个人信息。',
+      '不会出售个人数据。',
+      '默认不做账号画像或行为指纹追踪。',
+    ],
+    newsletterTitle: 'Newsletter',
+    newsletterBody:
+      '当前 newsletter 订阅为 Sendy 占位集成。启用后，你的邮箱仅用于接收 Linux Dork 更新，并可随时通过邮件底部链接取消订阅。',
+    cookiesTitle: 'Cookies',
+    cookiesBody: '本站可能使用少量 Cookie 用于分析或性能优化。你可以在浏览器中禁用 Cookie，但部分功能可能受影响。',
+    contactTitle: '联系',
+    contactBody: '如有隐私相关请求，请使用 Linux Dork 公布的联系方式。我们会随着网站发展更新本政策。',
+    backHome: '返回首页',
+  },
+};
+
+const c = policyCopy[locale];
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <BaseHead
+      title={c.pageTitle}
+      description={c.pageDescription}
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="surface-card policy">
+        <div class="terminal-pill">privacy</div>
+        <h1>{c.heading}</h1>
+        <p class="meta">{c.lastUpdated}: {updatedOn}</p>
+        <p>{c.intro}</p>
+
+        <h2>{c.collectTitle}</h2>
+        <ul>
+          {c.collectItems.map((item) => <li>{item}</li>)}
+        </ul>
+
+        <h2>{c.avoidTitle}</h2>
+        <ul>
+          {c.avoidItems.map((item) => <li>{item}</li>)}
+        </ul>
+
+        <h2>{c.newsletterTitle}</h2>
+        <p>{c.newsletterBody}</p>
+
+        <h2>{c.cookiesTitle}</h2>
+        <p>{c.cookiesBody}</p>
+
+        <h2>{c.contactTitle}</h2>
+        <p>{c.contactBody}</p>
+
+        <p class="back"><a href={withLocale(locale, '/')}>{c.backHome}</a></p>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .policy {
+    padding: clamp(1.1rem, 3.2vw, 1.8rem);
+  }
+
+  .meta {
+    color: var(--date-muted);
+    margin-bottom: 1rem;
+  }
+
+  .policy h2 {
+    margin-top: 1.2rem;
+  }
+
+  .policy ul {
+    margin: 0.4rem 0 0.8rem;
+    padding-left: 1.2rem;
+  }
+
+  .back {
+    margin-top: 1.2rem;
+  }
+</style>

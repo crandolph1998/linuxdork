@@ -1,0 +1,924 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { getLocaleFromPathname, type Locale, withLocale } from '../../i18n/ui';
+
+const locale = getLocaleFromPathname(Astro.url.pathname);
+
+const copy: Record<
+  Locale,
+  {
+    title: string;
+    metaTitle: string;
+    metaDescription: string;
+    lead: string;
+    backToTools: string;
+    filePath: string;
+    recursive: string;
+    modeBuilder: string;
+    modeOctal: string;
+    modeSymbolic: string;
+    owner: string;
+    group: string;
+    chmodPreview: string;
+    chownPreview: string;
+    copy: string;
+    copied: string;
+    noChown: string;
+    invalidMode: string;
+    presets: string;
+    ownerGroupHint: string;
+    user: string;
+    groupLabel: string;
+    other: string;
+    read: string;
+    write: string;
+    execute: string;
+    specialBits: string;
+    suid: string;
+    sgid: string;
+    sticky: string;
+    seoTitle: string;
+    seoBody: string;
+    faqTitle: string;
+    faq: Array<{ q: string; a: string }>;
+  }
+> = {
+  en: {
+    title: 'chmod/chown Command Builder',
+    metaTitle: 'chmod/chown Command Builder | Linux Dork',
+    metaDescription:
+      'Build Linux chmod and chown commands with live octal permissions, symbolic mode output, and safe copy-ready command strings.',
+    lead: 'Generate chmod and chown commands quickly without second-guessing permission bits or ownership syntax.',
+    backToTools: 'Back to Tools',
+    filePath: 'Target path',
+    recursive: 'Recursive (-R)',
+    modeBuilder: 'Permission mode builder',
+    modeOctal: 'Octal mode',
+    modeSymbolic: 'Symbolic mode',
+    owner: 'Owner',
+    group: 'Group',
+    chmodPreview: 'Generated chmod command',
+    chownPreview: 'Generated chown command',
+    copy: 'Copy',
+    copied: 'Copied',
+    noChown: 'No chown command generated yet. Enter owner and/or group.',
+    invalidMode: 'Invalid custom mode. Use 3 or 4 octal digits (for example: 755, 644, 2755).',
+    presets: 'Quick presets',
+    ownerGroupHint: 'Leave owner and group empty if you only want chmod.',
+    user: 'User',
+    groupLabel: 'Group',
+    other: 'Other',
+    read: 'Read',
+    write: 'Write',
+    execute: 'Execute',
+    specialBits: 'Special bits',
+    suid: 'setuid',
+    sgid: 'setgid',
+    sticky: 'sticky bit',
+    seoTitle: 'Linux chmod and chown syntax helper',
+    seoBody:
+      'Use this Linux permission command builder to create correct chmod and chown commands for scripts, deployment steps, and daily system administration tasks.',
+    faqTitle: 'chmod/chown FAQ',
+    faq: [
+      {
+        q: 'What is the difference between chmod and chown?',
+        a: 'chmod changes file permissions. chown changes the file owner and group.',
+      },
+      {
+        q: 'When should I use chmod 755 vs 644?',
+        a: '755 is common for executable files and directories. 644 is common for regular files that should not be executable.',
+      },
+      {
+        q: 'How do I change owner and group recursively?',
+        a: 'Use chown -R owner:group /path to apply ownership changes to all files and folders under a directory.',
+      },
+    ],
+  },
+  de: {
+    title: 'chmod/chown-Befehlsgenerator',
+    metaTitle: 'chmod/chown-Befehlsgenerator | Linux Dork',
+    metaDescription:
+      'Erstelle Linux-chmod- und chown-Befehle mit Oktalwerten, symbolischer Darstellung und kopierfertiger Ausgabe.',
+    lead: 'Erzeuge chmod- und chown-Befehle schnell, ohne Berechtigungsbits oder Besitzer-Syntax zu verwechseln.',
+    backToTools: 'Zuruck zu den Tools',
+    filePath: 'Zielpfad',
+    recursive: 'Rekursiv (-R)',
+    modeBuilder: 'Berechtigungsmodus-Generator',
+    modeOctal: 'Oktalmodus',
+    modeSymbolic: 'Symbolischer Modus',
+    owner: 'Besitzer',
+    group: 'Gruppe',
+    chmodPreview: 'Generierter chmod-Befehl',
+    chownPreview: 'Generierter chown-Befehl',
+    copy: 'Kopieren',
+    copied: 'Kopiert',
+    noChown: 'Noch kein chown-Befehl erzeugt. Besitzer und/oder Gruppe eingeben.',
+    invalidMode: 'Ungultiger Modus. Nutze 3 oder 4 Oktalziffern (z. B. 755, 644, 2755).',
+    presets: 'Schnellvorlagen',
+    ownerGroupHint: 'Besitzer und Gruppe leer lassen, wenn du nur chmod brauchst.',
+    user: 'Benutzer',
+    groupLabel: 'Gruppe',
+    other: 'Andere',
+    read: 'Lesen',
+    write: 'Schreiben',
+    execute: 'Ausfuhren',
+    specialBits: 'Spezialbits',
+    suid: 'setuid',
+    sgid: 'setgid',
+    sticky: 'Sticky-Bit',
+    seoTitle: 'Linux-Hilfe fur chmod- und chown-Syntax',
+    seoBody:
+      'Nutze diesen Linux-Berechtigungs-Generator, um korrekte chmod- und chown-Befehle fur Skripte, Deployments und den Systemalltag zu erstellen.',
+    faqTitle: 'chmod/chown-FAQ',
+    faq: [
+      {
+        q: 'Was ist der Unterschied zwischen chmod und chown?',
+        a: 'chmod andert Dateiberechtigungen. chown andert Besitzer und Gruppe einer Datei.',
+      },
+      {
+        q: 'Wann sollte ich chmod 755 statt 644 verwenden?',
+        a: '755 ist typisch fur ausfuhrbare Dateien und Verzeichnisse. 644 ist typisch fur normale, nicht ausfuhrbare Dateien.',
+      },
+      {
+        q: 'Wie andere ich Besitzer und Gruppe rekursiv?',
+        a: 'Nutze chown -R besitzer:gruppe /pfad, um Besitzrechte fur alle Dateien und Ordner darunter zu setzen.',
+      },
+    ],
+  },
+  pt: {
+    title: 'Gerador de Comandos chmod/chown',
+    metaTitle: 'Gerador de Comandos chmod/chown | Linux Dork',
+    metaDescription:
+      'Monte comandos chmod e chown no Linux com permissao octal, modo simbolico e saida pronta para copiar.',
+    lead: 'Gere comandos chmod e chown rapidamente sem duvidar de bits de permissao ou sintaxe de proprietario.',
+    backToTools: 'Voltar para Ferramentas',
+    filePath: 'Caminho de destino',
+    recursive: 'Recursivo (-R)',
+    modeBuilder: 'Gerador de modo de permissao',
+    modeOctal: 'Modo octal',
+    modeSymbolic: 'Modo simbolico',
+    owner: 'Proprietario',
+    group: 'Grupo',
+    chmodPreview: 'Comando chmod gerado',
+    chownPreview: 'Comando chown gerado',
+    copy: 'Copiar',
+    copied: 'Copiado',
+    noChown: 'Nenhum comando chown gerado ainda. Informe proprietario e/ou grupo.',
+    invalidMode: 'Modo invalido. Use 3 ou 4 digitos octais (ex.: 755, 644, 2755).',
+    presets: 'Presets rapidos',
+    ownerGroupHint: 'Deixe proprietario e grupo vazios se voce quiser apenas chmod.',
+    user: 'Usuario',
+    groupLabel: 'Grupo',
+    other: 'Outros',
+    read: 'Leitura',
+    write: 'Escrita',
+    execute: 'Execucao',
+    specialBits: 'Bits especiais',
+    suid: 'setuid',
+    sgid: 'setgid',
+    sticky: 'sticky bit',
+    seoTitle: 'Guia de sintaxe chmod e chown no Linux',
+    seoBody:
+      'Use este gerador de comandos de permissao no Linux para criar comandos chmod e chown corretos para scripts, deploys e tarefas diarias de administracao.',
+    faqTitle: 'FAQ de chmod/chown',
+    faq: [
+      {
+        q: 'Qual e a diferenca entre chmod e chown?',
+        a: 'chmod altera permissoes de arquivos. chown altera o proprietario e o grupo.',
+      },
+      {
+        q: 'Quando devo usar chmod 755 em vez de 644?',
+        a: '755 e comum para arquivos executaveis e diretorios. 644 e comum para arquivos comuns que nao devem ser executaveis.',
+      },
+      {
+        q: 'Como altero proprietario e grupo de forma recursiva?',
+        a: 'Use chown -R proprietario:grupo /caminho para aplicar a mudanca em todos os arquivos e pastas dentro do diretorio.',
+      },
+    ],
+  },
+  es: {
+    title: 'Generador de Comandos chmod/chown',
+    metaTitle: 'Generador de Comandos chmod/chown | Linux Dork',
+    metaDescription:
+      'Crea comandos chmod y chown en Linux con permisos octales, modo simbolico y salida lista para copiar.',
+    lead: 'Genera comandos chmod y chown rapidamente sin dudar de bits de permisos ni sintaxis de propietario.',
+    backToTools: 'Volver a Herramientas',
+    filePath: 'Ruta de destino',
+    recursive: 'Recursivo (-R)',
+    modeBuilder: 'Generador de modo de permisos',
+    modeOctal: 'Modo octal',
+    modeSymbolic: 'Modo simbolico',
+    owner: 'Propietario',
+    group: 'Grupo',
+    chmodPreview: 'Comando chmod generado',
+    chownPreview: 'Comando chown generado',
+    copy: 'Copiar',
+    copied: 'Copiado',
+    noChown: 'Aun no hay comando chown generado. Introduce propietario y/o grupo.',
+    invalidMode: 'Modo invalido. Usa 3 o 4 digitos octales (por ejemplo: 755, 644, 2755).',
+    presets: 'Ajustes rapidos',
+    ownerGroupHint: 'Deja propietario y grupo vacios si solo quieres chmod.',
+    user: 'Usuario',
+    groupLabel: 'Grupo',
+    other: 'Otros',
+    read: 'Lectura',
+    write: 'Escritura',
+    execute: 'Ejecucion',
+    specialBits: 'Bits especiales',
+    suid: 'setuid',
+    sgid: 'setgid',
+    sticky: 'sticky bit',
+    seoTitle: 'Guia de sintaxis chmod y chown en Linux',
+    seoBody:
+      'Usa este generador de permisos Linux para crear comandos chmod y chown correctos para scripts, despliegues y tareas diarias de administracion.',
+    faqTitle: 'FAQ de chmod/chown',
+    faq: [
+      {
+        q: 'Cual es la diferencia entre chmod y chown?',
+        a: 'chmod cambia los permisos del archivo. chown cambia el propietario y el grupo.',
+      },
+      {
+        q: 'Cuando debo usar chmod 755 en lugar de 644?',
+        a: '755 es comun para archivos ejecutables y directorios. 644 es comun para archivos normales que no deben ser ejecutables.',
+      },
+      {
+        q: 'Como cambio propietario y grupo de forma recursiva?',
+        a: 'Usa chown -R propietario:grupo /ruta para aplicar cambios de propiedad a todos los archivos y carpetas dentro del directorio.',
+      },
+    ],
+  },
+  fr: {
+    title: 'Generateur de Commandes chmod/chown',
+    metaTitle: 'Generateur de Commandes chmod/chown | Linux Dork',
+    metaDescription:
+      'Creez des commandes chmod et chown Linux avec permissions octales, mode symbolique et sortie prete a copier.',
+    lead: 'Generez rapidement des commandes chmod et chown sans hesiter sur les bits de permission ou la syntaxe de proprietaire.',
+    backToTools: 'Retour aux Outils',
+    filePath: 'Chemin cible',
+    recursive: 'Recursif (-R)',
+    modeBuilder: 'Generateur de mode de permissions',
+    modeOctal: 'Mode octal',
+    modeSymbolic: 'Mode symbolique',
+    owner: 'Proprietaire',
+    group: 'Groupe',
+    chmodPreview: 'Commande chmod generee',
+    chownPreview: 'Commande chown generee',
+    copy: 'Copier',
+    copied: 'Copie',
+    noChown: 'Aucune commande chown generee pour le moment. Entrez proprietaire et/ou groupe.',
+    invalidMode: 'Mode invalide. Utilisez 3 ou 4 chiffres octaux (ex. : 755, 644, 2755).',
+    presets: 'Presets rapides',
+    ownerGroupHint: 'Laissez proprietaire et groupe vides si vous voulez seulement chmod.',
+    user: 'Utilisateur',
+    groupLabel: 'Groupe',
+    other: 'Autres',
+    read: 'Lecture',
+    write: 'Ecriture',
+    execute: 'Execution',
+    specialBits: 'Bits speciaux',
+    suid: 'setuid',
+    sgid: 'setgid',
+    sticky: 'sticky bit',
+    seoTitle: 'Aide a la syntaxe chmod et chown Linux',
+    seoBody:
+      'Utilisez ce generateur de permissions Linux pour creer des commandes chmod et chown correctes pour les scripts, deploiements et taches d administration quotidiennes.',
+    faqTitle: 'FAQ chmod/chown',
+    faq: [
+      {
+        q: 'Quelle est la difference entre chmod et chown ?',
+        a: 'chmod modifie les permissions de fichiers. chown modifie le proprietaire et le groupe.',
+      },
+      {
+        q: 'Quand utiliser chmod 755 plutot que 644 ?',
+        a: '755 est courant pour les fichiers executables et les repertoires. 644 est courant pour les fichiers normaux non executables.',
+      },
+      {
+        q: 'Comment changer proprietaire et groupe de facon recursive ?',
+        a: 'Utilisez chown -R proprietaire:groupe /chemin pour appliquer les changements de propriete a tous les fichiers et dossiers du repertoire.',
+      },
+    ],
+  },
+  nl: {
+    title: 'chmod/chown Commando-bouwer',
+    metaTitle: 'chmod/chown Commando-bouwer | Linux Dork',
+    metaDescription:
+      'Maak Linux chmod- en chown-commando s met live octale rechten, symbolische modus en kopieerklare uitvoer.',
+    lead: 'Genereer snel chmod- en chown-commando s zonder te twijfelen over permissiebits of eigenaarsyntaxis.',
+    backToTools: 'Terug naar Tools',
+    filePath: 'Doelpad',
+    recursive: 'Recursief (-R)',
+    modeBuilder: 'Permissiemodus-bouwer',
+    modeOctal: 'Octale modus',
+    modeSymbolic: 'Symbolische modus',
+    owner: 'Eigenaar',
+    group: 'Groep',
+    chmodPreview: 'Gegenereerd chmod-commando',
+    chownPreview: 'Gegenereerd chown-commando',
+    copy: 'Kopieren',
+    copied: 'Gekopieerd',
+    noChown: 'Nog geen chown-commando gegenereerd. Vul eigenaar en/of groep in.',
+    invalidMode: 'Ongeldige modus. Gebruik 3 of 4 octale cijfers (bijv. 755, 644, 2755).',
+    presets: 'Snelle presets',
+    ownerGroupHint: 'Laat eigenaar en groep leeg als je alleen chmod wilt.',
+    user: 'Gebruiker',
+    groupLabel: 'Groep',
+    other: 'Overig',
+    read: 'Lezen',
+    write: 'Schrijven',
+    execute: 'Uitvoeren',
+    specialBits: 'Speciale bits',
+    suid: 'setuid',
+    sgid: 'setgid',
+    sticky: 'sticky bit',
+    seoTitle: 'Linux-hulp voor chmod- en chown-syntaxis',
+    seoBody:
+      'Gebruik deze Linux-permissiecommandobouwer om correcte chmod- en chown-commando s te maken voor scripts, deployments en dagelijkse systeemtaken.',
+    faqTitle: 'chmod/chown FAQ',
+    faq: [
+      {
+        q: 'Wat is het verschil tussen chmod en chown?',
+        a: 'chmod wijzigt bestandsrechten. chown wijzigt de bestands-eigenaar en groep.',
+      },
+      {
+        q: 'Wanneer gebruik ik chmod 755 in plaats van 644?',
+        a: '755 is gebruikelijk voor uitvoerbare bestanden en mappen. 644 is gebruikelijk voor gewone bestanden die niet uitvoerbaar moeten zijn.',
+      },
+      {
+        q: 'Hoe wijzig ik eigenaar en groep recursief?',
+        a: 'Gebruik chown -R eigenaar:groep /pad om eigendomswijzigingen toe te passen op alle bestanden en mappen onder een map.',
+      },
+    ],
+  },
+  it: {
+    title: 'Generatore Comandi chmod/chown',
+    metaTitle: 'Generatore Comandi chmod/chown | Linux Dork',
+    metaDescription:
+      'Crea comandi chmod e chown su Linux con permessi ottali, modalita simbolica e output pronto da copiare.',
+    lead: 'Genera rapidamente comandi chmod e chown senza dubbi su bit di permesso o sintassi proprietario.',
+    backToTools: 'Torna a Strumenti',
+    filePath: 'Percorso di destinazione',
+    recursive: 'Ricorsivo (-R)',
+    modeBuilder: 'Generatore modalita permessi',
+    modeOctal: 'Modalita ottale',
+    modeSymbolic: 'Modalita simbolica',
+    owner: 'Proprietario',
+    group: 'Gruppo',
+    chmodPreview: 'Comando chmod generato',
+    chownPreview: 'Comando chown generato',
+    copy: 'Copia',
+    copied: 'Copiato',
+    noChown: 'Nessun comando chown generato. Inserisci proprietario e/o gruppo.',
+    invalidMode: 'Modalita non valida. Usa 3 o 4 cifre ottali (es.: 755, 644, 2755).',
+    presets: 'Preset rapidi',
+    ownerGroupHint: 'Lascia proprietario e gruppo vuoti se vuoi solo chmod.',
+    user: 'Utente',
+    groupLabel: 'Gruppo',
+    other: 'Altri',
+    read: 'Lettura',
+    write: 'Scrittura',
+    execute: 'Esecuzione',
+    specialBits: 'Bit speciali',
+    suid: 'setuid',
+    sgid: 'setgid',
+    sticky: 'sticky bit',
+    seoTitle: 'Guida sintassi chmod e chown Linux',
+    seoBody:
+      'Usa questo generatore di comandi permessi Linux per creare comandi chmod e chown corretti per script, deployment e attivita quotidiane di amministrazione.',
+    faqTitle: 'FAQ chmod/chown',
+    faq: [
+      {
+        q: 'Qual e la differenza tra chmod e chown?',
+        a: 'chmod modifica i permessi dei file. chown modifica proprietario e gruppo del file.',
+      },
+      {
+        q: 'Quando usare chmod 755 invece di 644?',
+        a: '755 e comune per file eseguibili e directory. 644 e comune per file normali che non devono essere eseguibili.',
+      },
+      {
+        q: 'Come cambio proprietario e gruppo in modo ricorsivo?',
+        a: 'Usa chown -R proprietario:gruppo /percorso per applicare il cambio di proprieta a tutti i file e cartelle dentro una directory.',
+      },
+    ],
+  },
+  zh: {
+    title: 'chmod/chown 命令生成器',
+    metaTitle: 'chmod/chown 命令生成器 | Linux Dork',
+    metaDescription: '快速生成 Linux 的 chmod 和 chown 命令，实时显示八进制权限和符号权限，并可直接复制。',
+    lead: '快速生成 chmod 和 chown 命令，不再反复确认权限位和所有者语法。',
+    backToTools: '返回工具页',
+    filePath: '目标路径',
+    recursive: '递归 (-R)',
+    modeBuilder: '权限模式生成器',
+    modeOctal: '八进制模式',
+    modeSymbolic: '符号模式',
+    owner: '所有者',
+    group: '用户组',
+    chmodPreview: '生成的 chmod 命令',
+    chownPreview: '生成的 chown 命令',
+    copy: '复制',
+    copied: '已复制',
+    noChown: '尚未生成 chown 命令。请输入所有者和/或用户组。',
+    invalidMode: '自定义模式无效。请使用 3 位或 4 位八进制数字（例如：755、644、2755）。',
+    presets: '常用预设',
+    ownerGroupHint: '如果只需要 chmod，可以将所有者和用户组留空。',
+    user: '用户',
+    groupLabel: '用户组',
+    other: '其他',
+    read: '读',
+    write: '写',
+    execute: '执行',
+    specialBits: '特殊位',
+    suid: 'setuid',
+    sgid: 'setgid',
+    sticky: 'sticky bit',
+    seoTitle: 'Linux chmod/chown 语法助手',
+    seoBody: '使用这个 Linux 权限命令生成器，为脚本、部署流程和日常运维任务生成正确的 chmod 与 chown 命令。',
+    faqTitle: 'chmod/chown 常见问题',
+    faq: [
+      {
+        q: 'chmod 和 chown 有什么区别？',
+        a: 'chmod 用于修改文件权限，chown 用于修改文件的所有者和用户组。',
+      },
+      {
+        q: '什么时候用 chmod 755，什么时候用 644？',
+        a: '755 常用于可执行文件和目录。644 常用于不需要执行权限的普通文件。',
+      },
+      {
+        q: '如何递归修改所有者和用户组？',
+        a: '使用 chown -R owner:group /path，即可对目录下所有文件和文件夹应用所有权修改。',
+      },
+    ],
+  },
+};
+
+const t = copy[locale];
+const toolsPath = withLocale(locale, '/tools');
+const toolPath = withLocale(locale, '/tools/chmod-chown-builder');
+
+const faqJsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: t.faq.map((entry) => ({
+    '@type': 'Question',
+    name: entry.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: entry.a,
+    },
+  })),
+});
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <BaseHead title={t.metaTitle} description={t.metaDescription} />
+    <script type="application/ld+json" set:html={faqJsonLd}></script>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="surface-card hero scan-lines">
+        <div class="terminal-pill">chmod -R 755 /srv/app</div>
+        <h1>{t.title}</h1>
+        <p class="lead">{t.lead}</p>
+        <a class="back-link" href={toolsPath}>{t.backToTools}</a>
+      </section>
+
+      <section
+        class="tool-grid"
+        id="chmod-tool"
+        data-copy-label={t.copy}
+        data-copied-label={t.copied}
+        data-invalid-mode-label={t.invalidMode}
+        data-no-chown-label={t.noChown}
+      >
+        <article class="surface-card builder">
+          <div class="field-row">
+            <label for="target-path">{t.filePath}</label>
+            <input id="target-path" type="text" value="/var/www/html" spellcheck="false" />
+          </div>
+
+          <div class="toggle-row">
+            <label><input id="recursive" type="checkbox" /> {t.recursive}</label>
+            <span class="hint">{t.ownerGroupHint}</span>
+          </div>
+
+          <h2>{t.modeBuilder}</h2>
+          <div class="matrix">
+            <div class="matrix-head"></div>
+            <div class="matrix-head">{t.read}</div>
+            <div class="matrix-head">{t.write}</div>
+            <div class="matrix-head">{t.execute}</div>
+
+            <div class="matrix-row-label">{t.user}</div>
+            <input data-role="u" data-bit="r" type="checkbox" checked />
+            <input data-role="u" data-bit="w" type="checkbox" checked />
+            <input data-role="u" data-bit="x" type="checkbox" checked />
+
+            <div class="matrix-row-label">{t.groupLabel}</div>
+            <input data-role="g" data-bit="r" type="checkbox" checked />
+            <input data-role="g" data-bit="w" type="checkbox" />
+            <input data-role="g" data-bit="x" type="checkbox" checked />
+
+            <div class="matrix-row-label">{t.other}</div>
+            <input data-role="o" data-bit="r" type="checkbox" checked />
+            <input data-role="o" data-bit="w" type="checkbox" />
+            <input data-role="o" data-bit="x" type="checkbox" checked />
+          </div>
+
+          <div class="special-row">
+            <span>{t.specialBits}</span>
+            <label><input data-special="suid" type="checkbox" /> {t.suid}</label>
+            <label><input data-special="sgid" type="checkbox" /> {t.sgid}</label>
+            <label><input data-special="sticky" type="checkbox" /> {t.sticky}</label>
+          </div>
+
+          <div class="preset-row" aria-label={t.presets}>
+            <button type="button" data-preset="755">755</button>
+            <button type="button" data-preset="644">644</button>
+            <button type="button" data-preset="700">700</button>
+            <button type="button" data-preset="775">775</button>
+            <button type="button" data-preset="600">600</button>
+          </div>
+
+          <div class="output-grid">
+            <div>
+              <div class="section-label">{t.modeOctal}</div>
+              <p id="mode-octal" class="result">755</p>
+            </div>
+            <div>
+              <div class="section-label">{t.modeSymbolic}</div>
+              <p id="mode-symbolic" class="result">u=rwx,g=rx,o=rx</p>
+            </div>
+          </div>
+
+          <div class="owner-grid">
+            <div class="field-row">
+              <label for="owner-input">{t.owner}</label>
+              <input id="owner-input" type="text" value="www-data" spellcheck="false" />
+            </div>
+            <div class="field-row">
+              <label for="group-input">{t.group}</label>
+              <input id="group-input" type="text" value="www-data" spellcheck="false" />
+            </div>
+          </div>
+
+          <div class="command-block">
+            <div class="section-label">{t.chmodPreview}</div>
+            <pre><code id="chmod-command">chmod 755 /var/www/html</code></pre>
+            <button id="copy-chmod" type="button">{t.copy}</button>
+          </div>
+
+          <div class="command-block">
+            <div class="section-label">{t.chownPreview}</div>
+            <pre><code id="chown-command">chown www-data:www-data /var/www/html</code></pre>
+            <button id="copy-chown" type="button">{t.copy}</button>
+          </div>
+
+          <p id="tool-error" class="error-message" hidden></p>
+        </article>
+
+        <article class="surface-card seo-copy">
+          <h2>{t.seoTitle}</h2>
+          <p>{t.seoBody}</p>
+        </article>
+      </section>
+
+      <section class="surface-card faq-copy" aria-label={t.faqTitle}>
+        <h2>{t.faqTitle}</h2>
+        {
+          t.faq.map((entry) => (
+            <article>
+              <h3>{entry.q}</h3>
+              <p>{entry.a}</p>
+            </article>
+          ))
+        }
+      </section>
+    </main>
+    <Footer />
+
+    <script is:inline define:vars={{ toolPath }}>
+      const tool = document.getElementById('chmod-tool');
+      const pathInput = document.getElementById('target-path');
+      const recursiveInput = document.getElementById('recursive');
+      const ownerInput = document.getElementById('owner-input');
+      const groupInput = document.getElementById('group-input');
+      const permBoxes = Array.from(document.querySelectorAll('input[data-role]'));
+      const specialBoxes = Array.from(document.querySelectorAll('input[data-special]'));
+      const modeOctal = document.getElementById('mode-octal');
+      const modeSymbolic = document.getElementById('mode-symbolic');
+      const chmodOutput = document.getElementById('chmod-command');
+      const chownOutput = document.getElementById('chown-command');
+      const errorOutput = document.getElementById('tool-error');
+      const copyChmod = document.getElementById('copy-chmod');
+      const copyChown = document.getElementById('copy-chown');
+      const presetButtons = Array.from(document.querySelectorAll('button[data-preset]'));
+
+      const copyLabel = tool?.dataset.copyLabel || 'Copy';
+      const copiedLabel = tool?.dataset.copiedLabel || 'Copied';
+      const noChownLabel = tool?.dataset.noChownLabel || 'No chown command generated yet.';
+
+      function shellQuote(value) {
+        if (!value) return "''";
+        return `'${value.replace(/'/g, `'\\''`)}'`;
+      }
+
+      function roleBits(role) {
+        const read = document.querySelector(`input[data-role="${role}"][data-bit="r"]`)?.checked;
+        const write = document.querySelector(`input[data-role="${role}"][data-bit="w"]`)?.checked;
+        const exec = document.querySelector(`input[data-role="${role}"][data-bit="x"]`)?.checked;
+        const value = (read ? 4 : 0) + (write ? 2 : 0) + (exec ? 1 : 0);
+        const symbolic = `${read ? 'r' : ''}${write ? 'w' : ''}${exec ? 'x' : ''}`;
+        return { value, symbolic };
+      }
+
+      function getSpecialDigit() {
+        const suid = document.querySelector('input[data-special="suid"]')?.checked ? 4 : 0;
+        const sgid = document.querySelector('input[data-special="sgid"]')?.checked ? 2 : 0;
+        const sticky = document.querySelector('input[data-special="sticky"]')?.checked ? 1 : 0;
+        return suid + sgid + sticky;
+      }
+
+      function applyPreset(mode) {
+        const normalized = mode.padStart(4, '0');
+        const digits = normalized.split('').map((d) => Number(d));
+        const special = digits[0];
+        const perms = digits.slice(1);
+
+        const [u, g, o] = perms;
+        const mapping = [
+          { role: 'u', value: u },
+          { role: 'g', value: g },
+          { role: 'o', value: o },
+        ];
+
+        mapping.forEach(({ role, value }) => {
+          const read = (value & 4) !== 0;
+          const write = (value & 2) !== 0;
+          const exec = (value & 1) !== 0;
+          const r = document.querySelector(`input[data-role="${role}"][data-bit="r"]`);
+          const w = document.querySelector(`input[data-role="${role}"][data-bit="w"]`);
+          const x = document.querySelector(`input[data-role="${role}"][data-bit="x"]`);
+          if (r) r.checked = read;
+          if (w) w.checked = write;
+          if (x) x.checked = exec;
+        });
+
+        const suid = document.querySelector('input[data-special="suid"]');
+        const sgid = document.querySelector('input[data-special="sgid"]');
+        const sticky = document.querySelector('input[data-special="sticky"]');
+        if (suid) suid.checked = (special & 4) !== 0;
+        if (sgid) sgid.checked = (special & 2) !== 0;
+        if (sticky) sticky.checked = (special & 1) !== 0;
+
+        rebuild();
+      }
+
+      function rebuild() {
+        const path = (pathInput?.value || '').trim() || '/path/to/target';
+        const recursive = recursiveInput?.checked ? '-R ' : '';
+
+        const user = roleBits('u');
+        const group = roleBits('g');
+        const other = roleBits('o');
+        const special = getSpecialDigit();
+
+        const octal = `${special > 0 ? special : ''}${user.value}${group.value}${other.value}`;
+        const symbolic = `u=${user.symbolic},g=${group.symbolic},o=${other.symbolic}`;
+
+        const chmod = `chmod ${recursive}${octal} ${shellQuote(path)}`;
+
+        const owner = (ownerInput?.value || '').trim();
+        const grp = (groupInput?.value || '').trim();
+
+        let chown = noChownLabel;
+        if (owner || grp) {
+          const ownerPart = `${owner}${grp ? `:${grp}` : ''}`;
+          const groupOnlyPart = !owner && grp ? `:${grp}` : ownerPart;
+          chown = `chown ${recursive}${groupOnlyPart} ${shellQuote(path)}`;
+        }
+
+        if (modeOctal) modeOctal.textContent = octal;
+        if (modeSymbolic) modeSymbolic.textContent = symbolic;
+        if (chmodOutput) chmodOutput.textContent = chmod;
+        if (chownOutput) chownOutput.textContent = chown;
+        if (errorOutput) {
+          errorOutput.hidden = true;
+          errorOutput.textContent = '';
+        }
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('mode', octal);
+        url.searchParams.set('path', path);
+        history.replaceState({}, '', url.toString());
+      }
+
+      async function copyCommand(command, button) {
+        if (!command || command === noChownLabel) return;
+        await navigator.clipboard.writeText(command);
+        if (!button) return;
+        const original = button.textContent;
+        button.textContent = copiedLabel;
+        setTimeout(() => {
+          button.textContent = original || copyLabel;
+        }, 1200);
+      }
+
+      permBoxes.forEach((input) => input.addEventListener('change', rebuild));
+      specialBoxes.forEach((input) => input.addEventListener('change', rebuild));
+      pathInput?.addEventListener('input', rebuild);
+      recursiveInput?.addEventListener('change', rebuild);
+      ownerInput?.addEventListener('input', rebuild);
+      groupInput?.addEventListener('input', rebuild);
+
+      copyChmod?.addEventListener('click', () => copyCommand(chmodOutput?.textContent || '', copyChmod));
+      copyChown?.addEventListener('click', () => copyCommand(chownOutput?.textContent || '', copyChown));
+
+      presetButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const preset = btn.dataset.preset;
+          if (preset) applyPreset(preset);
+        });
+      });
+
+      rebuild();
+    </script>
+  </body>
+</html>
+
+<style>
+  .hero {
+    padding: clamp(1.2rem, 4vw, 2.2rem);
+  }
+
+  .lead {
+    max-width: 70ch;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 0.8rem;
+  }
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .builder {
+    padding: 1.1rem;
+  }
+
+  .field-row {
+    display: grid;
+    gap: 0.35rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .field-row input {
+    border-radius: 8px;
+    border: 1px solid var(--hero-recent-border);
+    background: var(--surface-soft);
+    color: var(--foreground);
+    padding: 0.62rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.96rem;
+  }
+
+  .toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 0.8rem 0 1rem;
+  }
+
+  .hint {
+    color: var(--date-muted);
+    font-size: 0.86rem;
+  }
+
+  .matrix {
+    display: grid;
+    grid-template-columns: 1fr repeat(3, auto);
+    gap: 0.45rem 0.8rem;
+    align-items: center;
+    margin-top: 0.8rem;
+  }
+
+  .matrix-head {
+    color: var(--date-muted);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .matrix-row-label {
+    font-weight: 600;
+  }
+
+  .matrix input[type='checkbox'],
+  .special-row input[type='checkbox'] {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .special-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin: 1rem 0;
+    align-items: center;
+  }
+
+  .preset-row {
+    display: flex;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .preset-row button,
+  .command-block button {
+    border: 1px solid var(--hero-recent-border);
+    background: var(--surface-soft);
+    color: var(--foreground);
+    border-radius: 8px;
+    padding: 0.46rem 0.68rem;
+    cursor: pointer;
+  }
+
+  .output-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .section-label {
+    color: var(--date-muted);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.28rem;
+  }
+
+  .result {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 1.02rem;
+  }
+
+  .owner-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+
+  .command-block {
+    margin-top: 1rem;
+  }
+
+  pre {
+    margin: 0.4rem 0 0.55rem;
+    overflow-x: auto;
+  }
+
+  .error-message {
+    margin-top: 0.8rem;
+    color: #ff8f8f;
+  }
+
+  .seo-copy,
+  .faq-copy {
+    padding: 1rem;
+  }
+
+  .faq-copy {
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 980px) {
+    .tool-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .output-grid,
+    .owner-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .toggle-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

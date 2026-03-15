@@ -4,44 +4,228 @@ import { getLocaleFromPathname, getTranslations, withLocale } from '../i18n/ui';
 const today = new Date();
 const locale = getLocaleFromPathname(Astro.url.pathname);
 const t = getTranslations(locale);
+const footerColumns = [
+	{
+		title: 'Linux Dork',
+		links: [
+			{ label: t.header.home, href: withLocale(locale, '/') },
+			{ label: t.header.about, href: withLocale(locale, '/about') },
+		],
+	},
+	{
+		title: t.header.tools,
+		links: [
+			{ label: t.footer.allTools, href: withLocale(locale, '/tools') },
+			{ label: t.footer.crontabGenerator, href: withLocale(locale, '/tools/crontab-generator') },
+		],
+	},
+	{
+		title: t.header.news,
+		links: [
+			{ label: t.footer.allNews, href: withLocale(locale, '/news') },
+			{ label: t.footer.kernelWatch, href: withLocale(locale, '/news/linux-kernel-quick-watch') },
+		],
+	},
+	{
+		title: t.header.blog,
+		links: [
+			{ label: t.footer.latestPosts, href: withLocale(locale, '/blog') },
+			{ label: t.footer.markdownGuide, href: withLocale(locale, '/blog/markdown-style-guide') },
+		],
+	},
+	{
+		title: t.header.selfHostedApps,
+		links: [
+			{ label: t.footer.allApps, href: withLocale(locale, '/self-hosted-apps') },
+			{ label: t.footer.immich, href: withLocale(locale, '/self-hosted-apps/immich') },
+		],
+	},
+];
 ---
 
 <footer>
 	<div class="surface-card inner">
-		<p class="line">&copy; {today.getFullYear()} Linux Dork.</p>
-		<p class="line subtle">{t.footer.tagline}</p>
-		<div class="links">
-			<a href={withLocale(locale, '/blog')}>{t.footer.readArchive}</a>
-			<a href={withLocale(locale, '/about')}>{t.footer.about}</a>
+		<div class="footer-top">
+			<div class="columns" role="navigation" aria-label={t.footer.footerLinksLabel}>
+				{
+					footerColumns.map((column) => (
+						<section class="column">
+							<h3>{column.title}</h3>
+							<ul>
+								{column.links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+							</ul>
+						</section>
+					))
+				}
+			</div>
+
+			<div class="newsletter">
+				<h3>{t.footer.newsletterTitle}</h3>
+				<p class="line subtle">{t.footer.newsletterHint}</p>
+				<form action="https://sendy.example.com/subscribe" method="post" target="_blank" novalidate>
+					<label for="sendy-email">{t.footer.emailLabel}</label>
+					<div class="newsletter-row">
+						<input id="sendy-email" type="email" name="email" placeholder={t.footer.emailPlaceholder} required />
+						<input type="hidden" name="name" value="" />
+						<input type="hidden" name="list" value="SENDY_LIST_ID" />
+						<button type="submit">{t.footer.subscribe}</button>
+					</div>
+				</form>
+				</div>
+		</div>
+
+		<div class="legal">
+			<p class="line copyright">&copy; {today.getFullYear()} Linux Dork.</p>
+			<p class="line subtle">{t.footer.tagline}</p>
+			<p class="privacy-link"><a href={withLocale(locale, '/privacy-policy')}>{t.footer.privacyPolicy}</a></p>
 		</div>
 	</div>
 </footer>
 <style>
 	footer {
-		padding: 0 1rem 2rem;
+		padding: 1rem 1rem 2rem;
 	}
 	.inner {
 		margin: 0 auto;
 		width: min(1080px, calc(100% - 0.1rem));
-		padding: 1.3rem;
-		text-align: center;
+		padding: 1.4rem;
+		--footer-edge-space: 1.4rem;
+		--footer-divider-gap: var(--footer-edge-space);
+	}
+	.footer-top {
+		display: grid;
+		grid-template-columns: minmax(0, 2.6fr) minmax(240px, 0.9fr);
+		gap: 1.1rem;
+		align-items: start;
+		margin-top: var(--footer-edge-space);
+		margin-bottom: var(--footer-divider-gap);
 	}
 	.line {
 		margin: 0;
 		color: var(--footer-line);
 	}
+	.copyright {
+		margin-top: 0;
+	}
+	.legal {
+		margin-top: 0;
+		padding-top: calc(var(--footer-divider-gap) + 0.5rem);
+		padding-bottom: var(--footer-divider-gap);
+		border-top: 1px solid var(--hero-recent-border);
+		text-align: center;
+	}
+	.privacy-link {
+		margin-top: 0.55rem;
+	}
+	.privacy-link a {
+		color: var(--footer-link);
+		text-decoration: none;
+		font-size: 0.92rem;
+	}
+	.privacy-link a:hover,
+	.privacy-link a:focus-visible {
+		text-decoration: underline;
+	}
 	.subtle {
 		margin-top: 0.35rem;
 		color: var(--footer-subtle);
 	}
-	.links {
-		display: flex;
-		justify-content: center;
+	.columns {
+		display: grid;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
 		gap: 1rem;
-		margin-top: 0.8rem;
 	}
-	.links a {
+	.column h3,
+	.newsletter h3 {
+		margin: 0 0 0.55rem;
+		font-size: 1rem;
+	}
+	.column ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: 0.45rem;
+	}
+	.column a {
 		text-decoration: none;
 		color: var(--footer-link);
+	}
+	.column a:hover,
+	.column a:focus-visible {
+		text-decoration: underline;
+	}
+	.newsletter {
+		justify-self: end;
+		width: min(320px, 100%);
+		padding: 0.9rem;
+		border: 1px solid var(--hero-recent-border);
+		border-top: 2px solid color-mix(in srgb, var(--signal-soft) 55%, var(--hero-recent-border));
+		border-radius: 12px;
+		background: var(--surface-soft);
+		box-shadow: 0 6px 16px color-mix(in srgb, var(--signal-soft) 10%, transparent);
+	}
+	.newsletter form {
+		display: grid;
+		gap: 0.45rem;
+		margin-top: 0.45rem;
+	}
+	.newsletter-row {
+		display: flex;
+		gap: 0.45rem;
+		flex-wrap: wrap;
+	}
+	.newsletter input[type='email'] {
+		flex: 1 1 100%;
+		min-height: 2.2rem;
+		border-radius: 8px;
+		border: 1px solid var(--hero-recent-border);
+		background: var(--surface-soft);
+		color: var(--foreground);
+		padding: 0.45rem 0.65rem;
+	}
+	.newsletter input[type='email']:focus-visible {
+		outline: 2px solid color-mix(in srgb, var(--signal-soft) 45%, transparent);
+		outline-offset: 2px;
+	}
+	.newsletter button {
+		min-height: 2.2rem;
+		border-radius: 8px;
+		border: 1px solid color-mix(in srgb, var(--signal-soft) 55%, var(--hero-recent-border));
+		background: linear-gradient(145deg, color-mix(in srgb, var(--signal) 78%, var(--surface-soft) 22%) 0%, color-mix(in srgb, var(--signal-soft) 82%, var(--surface) 18%) 100%);
+		color: var(--nav-active-text);
+		padding: 0.4rem 0.75rem;
+		cursor: pointer;
+		font-weight: 600;
+		font-size: 0.92rem;
+		transition: transform 140ms ease, filter 140ms ease;
+	}
+	.newsletter button:hover,
+	.newsletter button:focus-visible {
+		filter: brightness(1.06);
+		transform: translateY(-1px);
+	}
+	@media (max-width: 900px) {
+		.footer-top {
+			grid-template-columns: 1fr;
+		}
+		.newsletter {
+			justify-self: stretch;
+			width: 100%;
+		}
+		.columns {
+			grid-template-columns: repeat(5, minmax(0, 1fr));
+			gap: 0.75rem;
+		}
+	}
+	@media (max-width: 760px) {
+		.columns {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	@media (max-width: 560px) {
+		.columns {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

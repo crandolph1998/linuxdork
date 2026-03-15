@@ -1,0 +1,10 @@
+---
+import Page from '../privacy-policy.astro';
+import { getLocalizedStaticPaths } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return getLocalizedStaticPaths();
+}
+---
+
+<Page />

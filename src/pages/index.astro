@@ -10,12 +10,35 @@ import { getLocaleFromPathname, getTranslations, withLocale } from '../i18n/ui';
 const locale = getLocaleFromPathname(Astro.url.pathname);
 const t = getTranslations(locale);
 
-const posts = (await getCollection('blog'))
+const allPosts = await getCollection('blog');
+const posts = allPosts
+	.filter((entry: CollectionEntry<'blog'>) => !entry.id.includes('/'))
 	.sort(
 		(a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
 			b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 	)
 	.slice(0, 3);
+
+const translatedMap = new Map(
+	allPosts
+		.filter((entry: CollectionEntry<'blog'>) => entry.id.startsWith(`${locale}/`))
+		.map((entry: CollectionEntry<'blog'>) => [entry.id.replace(`${locale}/`, ''), entry.data]),
+);
+
+const allNews = await getCollection('news');
+const newsItems = allNews
+	.filter((entry: CollectionEntry<'news'>) => !entry.id.includes('/'))
+	.sort(
+		(a: CollectionEntry<'news'>, b: CollectionEntry<'news'>) =>
+			b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	)
+	.slice(0, 3);
+
+const translatedNewsMap = new Map(
+	allNews
+		.filter((entry: CollectionEntry<'news'>) => entry.id.startsWith(`${locale}/`))
+		.map((entry: CollectionEntry<'news'>) => [entry.id.replace(`${locale}/`, ''), entry.data]),
+);
 ---
 
 <!doctype html>
@@ -51,20 +74,44 @@ const posts = (await getCollection('blog'))
 				}
 			</section>
 
-			<section class="surface-card recent">
-				<h2>{t.home.recentTitle}</h2>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={withLocale(locale, `/blog/${post.id}`)}>
-									<h3>{post.data.title}</h3>
-									<p>{post.data.description}</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
+			<section class="recent-grid">
+				<div class="surface-card recent">
+					<h2>{t.home.recentTitle}</h2>
+					<ul>
+						{
+							posts.map((post) => {
+								const tData = translatedMap.get(post.id);
+								return (
+									<li>
+										<a href={withLocale(locale, `/blog/${post.id}`)}>
+											<h3>{tData?.title ?? post.data.title}</h3>
+											<p>{tData?.description ?? post.data.description}</p>
+										</a>
+									</li>
+								);
+							})
+						}
+					</ul>
+				</div>
+
+				<div class="surface-card recent">
+					<h2>{t.news.title}</h2>
+					<ul>
+						{
+							newsItems.map((item) => {
+								const tData = translatedNewsMap.get(item.id);
+								return (
+									<li>
+										<a href={withLocale(locale, `/news/${item.id}`)}>
+											<h3>{tData?.title ?? item.data.title}</h3>
+											<p>{tData?.description ?? item.data.description}</p>
+										</a>
+									</li>
+								);
+							})
+						}
+					</ul>
+				</div>
 			</section>
 		</main>
 		<Footer />
@@ -102,6 +149,15 @@ const posts = (await getCollection('blog'))
 		margin-top: 1rem;
 		padding: 1.2rem;
 	}
+	.recent-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+		margin-top: 1rem;
+	}
+	.recent-grid .recent {
+		margin-top: 0;
+	}
 	.recent ul {
 		list-style: none;
 		margin: 0.8rem 0 0;
@@ -131,6 +187,9 @@ const posts = (await getCollection('blog'))
 	}
 	@media (max-width: 860px) {
 		.stats {
+			grid-template-columns: 1fr;
+		}
+		.recent-grid {
 			grid-template-columns: 1fr;
 		}
 	}

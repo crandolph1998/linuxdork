@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
@@ -34,82 +33,65 @@ const translatedMap = new Map(
 			main {
 				width: min(1080px, calc(100% - 2rem));
 			}
+			.hero {
+				padding: clamp(1.2rem, 4vw, 2.2rem);
+			}
+			.lead {
+				max-width: 65ch;
+			}
 			ul {
 				display: grid;
-				grid-template-columns: repeat(2, minmax(0, 1fr));
-				gap: 1rem;
+				grid-template-columns: 1fr;
+				gap: 0.9rem;
 				list-style-type: none;
-				margin: 0;
+				margin: 1rem 0 0;
 				padding: 0;
 			}
 			ul li {
 				width: 100%;
 			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				grid-column: span 2;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.1rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 0.9rem;
-				border: 1px solid var(--hero-recent-border);
-			}
-			ul li a {
+			.post-card {
 				display: block;
-				padding: 0.9rem;
+				padding: 1rem 1.1rem;
 				border-radius: 1rem;
 				background: var(--surface-gradient);
 				border: 1px solid var(--hero-recent-border);
+				text-decoration: none;
+				transition: transform 0.2s ease, border-color 0.2s ease;
 			}
 			.title {
 				margin: 0;
 				color: var(--title-strong);
-				line-height: 1;
+				line-height: 1.1;
+				font-size: 1.3rem;
 			}
 			.date {
-				margin: 0.45rem 0 0;
+				margin: 0.45rem 0;
 				color: var(--date-muted);
 			}
-			ul li a:hover h4,
-			ul li a:hover .date {
+			.excerpt {
+				margin: 0;
+				color: color-mix(in srgb, var(--foreground) 88%, var(--muted) 12%);
+			}
+			.post-card:hover .title,
+			.post-card:hover .date {
 				color: var(--link-hover);
 			}
-			ul a:hover img {
-				box-shadow: 0 0 0 1px var(--image-outline);
-			}
-			ul li a:hover {
+			.post-card:hover {
 				transform: translateY(-2px);
 				border-color: var(--hero-recent-hover-border);
-			}
-			@media (max-width: 720px) {
-				ul {
-					grid-template-columns: 1fr;
-					gap: 0.7rem;
-				}
-				ul li {
-					width: 100%;
-				}
-				ul li:first-child {
-					grid-column: span 1;
-				}
-				ul li:first-child .title {
-					font-size: 1.5rem;
-				}
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
+			<section class="surface-card hero scan-lines">
+				<div class="terminal-pill">grep -R "linux" notes/</div>
+				<h1>{t.header.blog}</h1>
+				<p class="lead">{t.blog.metaDescription}</p>
+			</section>
+
 			<section>
 				<ul>
 					{
@@ -117,14 +99,12 @@ const translatedMap = new Map(
 							const tData = translatedMap.get(post.id);
 							return (
 								<li>
-									<a href={withLocale(locale, `/blog/${post.id}`)}>
-										{post.data.heroImage && (
-											<Image width={720} height={360} src={post.data.heroImage} alt="" />
-										)}
+									<a class="post-card" href={withLocale(locale, `/blog/${post.id}`)}>
 										<h4 class="title">{tData?.title ?? post.data.title}</h4>
 										<p class="date">
 											<FormattedDate date={post.data.pubDate} />
 										</p>
+										<p class="excerpt">{tData?.description ?? post.data.description}</p>
 									</a>
 								</li>
 							);

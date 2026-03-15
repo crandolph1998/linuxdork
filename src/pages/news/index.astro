@@ -1,0 +1,96 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getLocaleFromPathname, getTranslations, withLocale } from '../../i18n/ui';
+
+const locale = getLocaleFromPathname(Astro.url.pathname);
+const t = getTranslations(locale);
+
+const allNews = await getCollection('news');
+const newsItems = allNews
+  .filter((entry: CollectionEntry<'news'>) => !entry.id.includes('/'))
+  .sort(
+    (a: CollectionEntry<'news'>, b: CollectionEntry<'news'>) =>
+      b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  );
+
+const translatedMap = new Map(
+  allNews
+    .filter((entry: CollectionEntry<'news'>) => entry.id.startsWith(`${locale}/`))
+    .map((entry: CollectionEntry<'news'>) => [entry.id.replace(`${locale}/`, ''), entry.data]),
+);
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <BaseHead title={t.news.metaTitle} description={t.news.metaDescription} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="surface-card hero scan-lines">
+        <div class="terminal-pill">watch -n 3600 news</div>
+        <h1>{t.news.title}</h1>
+        <p class="lead">{t.news.lead}</p>
+      </section>
+
+      <section class="feed">
+        {
+          newsItems.map((item) => {
+            const tData = translatedMap.get(item.id);
+            return (
+              <article class="surface-card card">
+                <h2><a href={withLocale(locale, `/news/${item.id}`)}>{tData?.title ?? item.data.title}</a></h2>
+                <p class="date"><FormattedDate date={item.data.pubDate} /></p>
+                <p>{tData?.description ?? item.data.description}</p>
+              </article>
+            );
+          })
+        }
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .hero {
+    padding: clamp(1.2rem, 4vw, 2.2rem);
+  }
+
+  .lead {
+    max-width: 65ch;
+  }
+
+  .feed {
+    display: grid;
+    gap: 0.9rem;
+    margin-top: 1rem;
+  }
+
+  .card {
+    padding: 1rem 1.1rem;
+  }
+
+  .card h2 {
+    margin: 0;
+    font-size: 1.3rem;
+  }
+
+  .card a {
+    text-decoration: none;
+  }
+
+  .card a:hover {
+    text-decoration: underline;
+  }
+
+  .date {
+    color: var(--date-muted);
+    margin: 0.45rem 0;
+  }
+</style>

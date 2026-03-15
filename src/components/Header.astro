@@ -22,10 +22,10 @@ const localeLinks = locales.map((code) => ({
 		</div>
 		<div class="internal-links">
 			<HeaderLink href={withLocale(locale, '/')}>{t.header.home}</HeaderLink>
+			<HeaderLink href={withLocale(locale, '/news')}>{t.header.news}</HeaderLink>
 			<HeaderLink href={withLocale(locale, '/blog')}>{t.header.blog}</HeaderLink>
 			<HeaderLink href={withLocale(locale, '/tools')}>{t.header.tools}</HeaderLink>
 			<HeaderLink href={withLocale(locale, '/self-hosted-apps')}>{t.header.selfHostedApps}</HeaderLink>
-			<HeaderLink href={withLocale(locale, '/about')}>{t.header.about}</HeaderLink>
 			<select class="locale-select" aria-label={t.localeLabel} data-locale-select>
 				{
 					localeLinks.map((entry) => (

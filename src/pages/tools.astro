@@ -7,11 +7,13 @@ import { getLocaleFromPathname, getTranslations, withLocale } from '../i18n/ui';
 
 const locale = getLocaleFromPathname(Astro.url.pathname);
 const t = getTranslations(locale);
-const isExternalHref = (href: string) => /^https?:\/\//.test(href);
-const getToolHref = (href: string) => (isExternalHref(href) ? href : withLocale(locale, href));
+const getToolHref = (href: string) => withLocale(locale, href);
 
 const tools = (await getCollection('resources'))
-  .filter((entry: CollectionEntry<'resources'>) => entry.data.category === 'tools')
+  .filter(
+    (entry: CollectionEntry<'resources'>) =>
+      entry.data.category === 'tools' && entry.data.href.startsWith('/tools/'),
+  )
   .sort(
     (a: CollectionEntry<'resources'>, b: CollectionEntry<'resources'>) =>
       Number(b.data.featured) - Number(a.data.featured) || a.data.title.localeCompare(b.data.title),
@@ -37,9 +39,7 @@ const tools = (await getCollection('resources'))
           tools.map((tool) => (
             <article class="surface-card card">
               {(() => {
-                const external = isExternalHref(tool.data.href);
                 const href = getToolHref(tool.data.href);
-                const ctaLabel = external ? t.tools.visitProject : 'Open tool';
                 return (
                   <>
               <div class="eyebrow">{tool.data.featured ? t.tools.featured : t.tools.regular}</div>
@@ -49,7 +49,7 @@ const tools = (await getCollection('resources'))
                 {tool.data.tags.map((tag: string) => <span>{tag}</span>)}
               </div>
               <p class="body">{tool.body}</p>
-              <a href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>{ctaLabel}</a>
+              <a href={href}>Open tool</a>
                   </>
                 );
               })()}

@@ -1,0 +1,30 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BlogPost from '../../../layouts/BlogPost.astro';
+import { defaultLocale, locales } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const allNews = await getCollection('news');
+  const englishNews = allNews.filter((item) => !item.id.includes('/'));
+  return locales
+    .filter((locale) => locale !== defaultLocale)
+    .flatMap((lang) =>
+      englishNews.map((item) => ({
+        params: { lang, slug: item.id },
+      })),
+    );
+}
+
+const { lang, slug } = Astro.params;
+const allNews = await getCollection('news');
+const newsById = new Map(allNews.map((entry) => [entry.id, entry]));
+
+const translatedItem = newsById.get(`${lang}/${slug}`);
+const englishItem = newsById.get(slug!);
+const item = (translatedItem ?? englishItem) as CollectionEntry<'news'>;
+const { Content } = await render(item);
+---
+
+<BlogPost {...item.data}>
+  <Content />
+</BlogPost>
