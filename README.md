@@ -1,6 +1,6 @@
 # Linux Dork
 
-Linux Dork is a multilingual Astro site focused on Linux content, including blog posts, self-hosted app guides, and practical tools.
+Linux Dork is a multilingual Astro site focused on Linux content, including articles, news, self-hosted app guides, and practical tools.
 
 ## Tech Stack
 
@@ -15,13 +15,23 @@ Linux Dork is a multilingual Astro site focused on Linux content, including blog
 	- `en` (default)
 	- `de`, `pt`, `es`, `fr`, `nl`, `it`, `zh`
 - Localized blog pages with translation-first routing and fallback behavior
-- Tools index powered by content entries in `src/content/resources/`
+- Localized news pages backed by Astro content collections
+- Tools index that shows internal tools from `src/content/resources/`
 - Internal Linux tool: Crontab Generator
 	- Route: `/tools/crontab-generator`
 	- Localized routes: `/<locale>/tools/crontab-generator`
 	- Human-readable cron parsing
 	- Next run preview
 	- FAQ + FAQPage JSON-LD
+- Internal Linux tool: chmod/chown Command Builder
+	- Route: `/tools/chmod-chown-builder`
+	- Localized routes: `/<locale>/tools/chmod-chown-builder`
+	- Permission matrix and special bits support
+	- Command preview and copy actions
+- Homepage includes both recent articles and recent news
+- Localized privacy policy pages:
+	- `/privacy-policy`
+	- `/<locale>/privacy-policy`
 
 ## Project Structure
 
@@ -31,12 +41,14 @@ Linux Dork is a multilingual Astro site focused on Linux content, including blog
 │   ├── components/
 │   ├── content/
 │   │   ├── blog/
+│   │   ├── news/
 │   │   ├── resources/
 │   │   └── selfHostedApps/
 │   ├── i18n/
 │   ├── layouts/
 │   └── pages/
 │       ├── [lang]/
+│       ├── news/
 │       └── tools/
 ├── astro.config.mjs
 ├── package.json
@@ -62,7 +74,8 @@ Run from the repository root:
 
 ## Content Workflow
 
-- Blog posts live in `src/content/blog/<locale>/`
+- Blog posts live in `src/content/blog/` (with locale variants where available)
+- News posts live in `src/content/news/`
 - Tool/resource cards live in `src/content/resources/`
 - Self-hosted app content lives in `src/content/selfHostedApps/`
 - Collection schemas are defined in `src/content.config.ts`
