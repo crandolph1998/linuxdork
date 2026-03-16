@@ -91,6 +91,7 @@ const footerColumns = [
 		padding: 1.4rem;
 		--footer-edge-space: 1.4rem;
 		--footer-divider-gap: var(--footer-edge-space);
+		--footer-legal-gap: calc(var(--footer-divider-gap) + 0.5rem);
 	}
 	.footer-top {
 		display: grid;
@@ -98,7 +99,7 @@ const footerColumns = [
 		gap: 1.1rem;
 		align-items: start;
 		margin-top: var(--footer-edge-space);
-		margin-bottom: var(--footer-divider-gap);
+		margin-bottom: 0;
 	}
 	.line {
 		margin: 0;
@@ -108,14 +109,14 @@ const footerColumns = [
 		margin-top: 0;
 	}
 	.legal {
-		margin-top: 0;
-		padding-top: calc(var(--footer-divider-gap) + 0.5rem);
-		padding-bottom: var(--footer-divider-gap);
+		margin-top: var(--footer-legal-gap);
+		padding-top: var(--footer-legal-gap);
+		padding-bottom: var(--footer-legal-gap);
 		border-top: 1px solid var(--hero-recent-border);
 		text-align: center;
 	}
 	.privacy-link {
-		margin-top: 0.55rem;
+		margin: 0.55rem 0 0;
 	}
 	.privacy-link a {
 		color: var(--footer-link);
@@ -129,6 +130,9 @@ const footerColumns = [
 	.subtle {
 		margin-top: 0.35rem;
 		color: var(--footer-subtle);
+	}
+	.legal .subtle {
+		margin-top: 0.35rem;
 	}
 	.columns {
 		display: grid;

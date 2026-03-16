@@ -56,7 +56,7 @@ const translations = {
           body: 'Clean defaults, reversible tweaks, and a healthy fear of copy-paste one-liners.',
         },
       ],
-      recentTitle: 'Recent Linux Notes',
+      recentTitle: 'Linux Articles',
     },
     about: {
       title: 'About Linux Dork',
